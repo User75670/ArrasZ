@@ -37,10 +37,10 @@ const room = {
     cycleSpeed: 1000 / roomSpeed / 30,
     width: c.WIDTH,
     height: c.HEIGHT,
-    setup: c.ROOM_SETUP,
-    xgrid: c.X_GRID, 
-    ygrid: c.Y_GRID,
-    gameMode: c.MODE,
+    setup: c.ROOM_SETUP[c.MAP],
+    xgrid: c.ROOM_SETUP[c.MAP][0].length, 
+    ygrid: c.ROOM_SETUP[c.MAP].length,
+    gameMode: c.MODE,   
     skillBoost: c.SKILL_BOOST,
     scale: {
         square: c.WIDTH * c.HEIGHT / 100000000,
@@ -2914,7 +2914,7 @@ const sockets = (() => {
                             'R',
                             room.width,
                             room.height,
-                            JSON.stringify(c.ROOM_SETUP), 
+                            JSON.stringify(c.ROOM_SETUP[c.MAP]), 
                             JSON.stringify(util.serverStartTime),
                             roomSpeed
                         );

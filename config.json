@@ -16,16 +16,16 @@
   "MODE": "tdm",
   "RANDOM_COLORS": false,
   "BANNED_CHARACTER_REGEX": "/[\uFDFD\u200E\u0000]/gi", 
-  "GAMEMODE": "custom",
-  "ROOM_SETUP":[
-    [ "bas1", "roid", "roid", "norm", "norm"],
-    [ "roid", "roid", "roid", "norm", "norm"],
-    [ "roid", "roid", "roid", "norm", "norm"],
-    [ "norm", "norm", "norm", "nest", "nest"],
-    [ "norm", "norm", "norm", "nest", "nest"]
-  ],
-  "X_GRID": 5,
-  "Y_GRID": 5,
+  "MAP": "custom",
+  "ROOM_SETUP": {
+    "custom": [
+     [ "bas1", "roid", "roid", "norm", "norm"],
+     [ "roid", "roid", "roid", "norm", "norm"],
+     [ "roid", "roid", "roid", "norm", "norm"],
+     [ "norm", "norm", "norm", "nest", "nest"],
+     [ "norm", "norm", "norm", "nest", "nest"]
+    ]
+  },
   "DAMAGE_CONSTANT": 0.6,
   "KNOCKBACK_CONSTANT": 1,
   "ROOM_BOUND_FORCE": 0.01,
