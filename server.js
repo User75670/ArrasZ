@@ -1653,6 +1653,7 @@ class Entity {
         this.phase = false;
         this.alpha = 1;
         this.invisible = [0, 0];
+        this.spinSpeed = null;
         // Get a new unique id
         this.id = entitiesIdLog++;
         this.team = this.id;
@@ -1745,6 +1746,9 @@ class Entity {
         }
         if (set.FACING_TYPE != null) { 
             this.facingType = set.FACING_TYPE; 
+        }
+        if (set.SPIN_SPEED != null && typeof set.SPIN_SPEED === 'number') { 
+            this.spinSpeed = set.SPIN_SPEED; 
         }
         if (set.DRAW_HEALTH != null) { 
             this.settings.drawHealth = set.DRAW_HEALTH; 
@@ -2227,7 +2231,11 @@ class Entity {
             oldFacing = this.facing;
         switch(this.facingType) {
         case 'autospin':
-            this.facing += 0.02 / roomSpeed;
+            if (this.spinSpeed !== null) {
+                this.facing += this.spinSpeed / 50 / roomSpeed;
+            } else {
+                this.facing += 0.02 / roomSpeed;
+            }
             break;
         case 'turnWithSpeed':
             this.facing += this.velocity.length / 90 * Math.PI / roomSpeed;
