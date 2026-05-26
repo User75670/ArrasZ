@@ -4909,7 +4909,7 @@ var maintainloop = (() => {
             // Do the censusNest
             food = entities.map(instance => {
                 try {
-                    if (instance.type === 'tank' && !instance.isBot) {
+                    if (instance.type === 'tank') {
                         census.tank++;
                     } else if (instance.foodLevel > -1) { 
                         if (room.isIn('nest', { x: instance.x, y: instance.y, })) { censusNest.sum++; censusNest[instance.foodLevel]++; }
