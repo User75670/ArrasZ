@@ -4082,7 +4082,7 @@ const sockets = (() => {
                         },
                         terminate: () => {
                             clearTimeout(nextUpdateCall);
-                            clearTimeout(trafficMonitoring);
+                            clearInterval(trafficMonitoring);
                             broadcast.unsubscribe(socket)
                         },
                     };
