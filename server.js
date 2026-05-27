@@ -4189,7 +4189,7 @@ const sockets = (() => {
 /**** GAME SETUP ****/
 // Define how the game lives
 // The most important loop. Fast looping.
-var gameloop = (() => {
+var simulation = (() => {
     // Collision stuff
     let collide = (() => {
         function simplecollide(my, n) {
@@ -4891,17 +4891,18 @@ var maintainloop = (() => {
                 // Set location
                 this.x = o.x;
                 this.y = o.y;
-                //util.debug('FoodSpawner placed at ('+this.x+', '+this.y+'). Set to produce '+this.foodToMake+' food.');
+                // util.debug('FoodSpawner placed at ('+this.x+', '+this.y+'). Set to produce '+this.foodToMake+' food.');
             }        
             rot() {
                 if (--this.foodToMake < 0) {
-                    //util.debug('FoodSpawner rotted, respawning.');
+                    // util.debug('FoodSpawner rotted, respawning.');
                     util.remove(foodSpawners, foodSpawners.indexOf(this));
                     foodSpawners.push(new FoodSpawner());
                 }
             }
             stop() {
                 util.remove(foodSpawners, foodSpawners.indexOf(this))
+                util.debug('Removed Foodspawner at index ' + foodSpawners.indexOf(this))
             }
         }
         // Add them
@@ -4956,6 +4957,7 @@ var maintainloop = (() => {
                 [6]: 0,
                 sum: 0,
             };
+
             // Do the censusNest
             food = entities.map(instance => {
                 try {                           // bots don't count
@@ -4969,7 +4971,7 @@ var maintainloop = (() => {
                 } catch (err) { util.error(instance.label); util.error(err); instance.kill(); }
             }).filter(e => { return e; });     
             // Sum it up   
-
+            let done = false;
             let maxFood = 1 + room.maxFood + 15 * census.tank;      
             let maxNestFood = 1 + room.maxFood * room.nestFoodAmount;
             let foodAmount = census.sum;
@@ -4977,14 +4979,14 @@ var maintainloop = (() => {
             /*********** ROT OLD SPAWNERS **********/
             foodSpawners.forEach(spawner => { if (ran.chance(1 - foodAmount/maxFood)) spawner.rot(); });
             /************** MAKE FOOD **************/
-            while (ran.chance(0.8 * (1 - foodAmount * foodAmount / maxFood / maxFood))) {
+            while (ran.chance(0.8 * (1 - foodAmount * foodAmount / maxFood / maxFood)) && foodSpawners.length > 0) {
                 switch (ran.chooseChance(10, 2, 1)) {
                 case 0: makeGroupedFood(); break;
                 case 1: makeDistributedFood(); break;
                 case 2: makeCornerFood(); break;
                 }
             } 
-            while (ran.chance(0.5 * (1 - nestFoodAmount * nestFoodAmount / maxNestFood / maxNestFood))) makeNestFood();
+            while (ran.chance(0.5 * (1 - nestFoodAmount * nestFoodAmount / maxNestFood / maxNestFood)) && foodSpawners.length > 0) makeNestFood();
             /************* UPGRADE FOOD ************/
             if (!food.length) return 0;
             for (let i=Math.ceil(food.length / 100); i>0; i--) {
@@ -5110,6 +5112,25 @@ let websockets = (() => {
 })().on('connection', sockets.connect); 
 
 // Bring it to life
-setInterval(gameloop, room.cycleSpeed);
+const TPS = 30;
+const TICK = 1000 / TPS;
+
+let timePassed = Date.now();
+let unusedTime = 0;
+
+function gameloop() {
+    const now = Date.now();
+    unusedTime += now - timePassed;
+    timePassed = now;
+
+    while (unusedTime >= TICK) {
+        simulation();
+        unusedTime -= TICK;
+    }
+
+    setImmediate(gameloop);
+}
+
+gameloop();
 setInterval(maintainloop, 200);
 setInterval(speedcheckloop, 1000);
