@@ -5112,20 +5112,23 @@ let websockets = (() => {
 })().on('connection', sockets.connect); 
 
 // Bring it to life
+
+// game loop settings here
 const TPS = 30;
 const TICK = 1000 / TPS;
-const MAX_LAG_PROCESSING = 10 * TICK;
+const MAX_CATCH_UPS = 10 * TICK;
 const MAX_DELTA = 40;
 
-let timePassed = p.now();
+let loopTimestamp = p.now();
 let unusedTime = 0;
 
+// improved game loop, much smoother than using setInterval
 function gameloop() {
     const now = p.now();
-    const delta = Math.min(MAX_DELTA, now - timePassed);
+    const delta = Math.min(MAX_DELTA, now - loopTimestamp);
     unusedTime += delta;
-    timePassed = now;
-    if (unusedTime > MAX_LAG_PROCESSING) unusedTime = MAX_LAG_PROCESSING;
+    loopTimestamp = now;
+    if (unusedTime > MAX_CATCH_UPS) unusedTime = MAX_CATCH_UPS;
     while (unusedTime >= TICK) {
         simulation();
         unusedTime -= TICK;
@@ -5135,5 +5138,7 @@ function gameloop() {
 }
 
 gameloop();
+
+// we don't need to change these
 setInterval(maintainloop, 200);
 setInterval(speedcheckloop, 1000);
