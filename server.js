@@ -557,7 +557,7 @@ class io_nearestDifferentMaster extends IO {
             if (e.master.master.team !== -101) {
             if (e.type === 'tank' || e.type === 'crasher' || (!this.body.aiSettings.shapefriend && e.type === 'food')) {
             if (Math.abs(e.x - m.x) < range && Math.abs(e.y - m.y) < range) {
-            if (!this.body.aiSettings.blind || (Math.abs(e.x - mm.x) < range && Math.abs(e.y - mm.y) < range)) return e;
+            if (!this.body.aiSettings.blind || (Math.abs(e.x - mm.x) < range && Math.abs(e.y - mm.y) < range)) {if (!e.spectator) return e};
             } } } } } }
         }).filter((e) => { return e; });
         
@@ -1716,6 +1716,7 @@ class Entity {
         this.team = this.id;
         this.team = master.team;
         this.isBot = false;
+        this.spectator = false;
         // This is for collisions
         this.updateAABB = () => {};
         this.getAABB = (() => {
@@ -1909,6 +1910,9 @@ class Entity {
         }
         if (set.DANGER != null) { 
             this.dangerValue = set.DANGER; 
+        }
+        if (set.SPECTATOR !== null && typeof set.SPECTATOR === 'boolean') {
+            this.spectator = set.SPECTATOR;
         }
         if (set.VARIES_IN_SIZE != null) { 
             this.settings.variesInSize = set.VARIES_IN_SIZE; 
@@ -2391,10 +2395,14 @@ class Entity {
         if (room.gameMode === 'tdm' && this.type !== 'food') { 
             let loc = { x: this.x, y: this.y, };
             if (
-                (this.team !== -1 && room.isIn('bas1', loc)) ||
-                (this.team !== -2 && room.isIn('bas2', loc)) ||
-                (this.team !== -3 && room.isIn('bas3', loc)) ||
-                (this.team !== -4 && room.isIn('bas4', loc))
+                (
+                    (this.team !== -1 && room.isIn('bas1', loc)) ||
+                    (this.team !== -2 && room.isIn('bas2', loc)) ||
+                    (this.team !== -3 && room.isIn('bas3', loc)) ||
+                    (this.team !== -4 && room.isIn('bas4', loc))
+                ) &&
+                !this.settings.godmode &&
+                !this.spectator
             ) { this.kill(); }
         }
     }
@@ -4190,7 +4198,7 @@ const sockets = (() => {
 /**** GAME SETUP ****/
 // Define how the game lives
 // The most important loop. Fast looping.
-var simulation = (() => {
+var gameloop = (() => {
     // Collision stuff
     let collide = (() => {
         function simplecollide(my, n) {
@@ -5116,28 +5124,28 @@ let websockets = (() => {
 // game loop settings here
 const TPS = 30;
 const TICK = 1000 / TPS;
-const MAX_CATCH_UPS = 10 * TICK;
+const MAX_UNUSED_TIME = 1000;
 const MAX_DELTA = 40;
 
 let loopTimestamp = p.now();
 let unusedTime = 0;
 
 // improved game loop, much smoother than using setInterval
-function gameloop() {
+function simulation() {
     const now = p.now();
     const delta = Math.min(MAX_DELTA, now - loopTimestamp);
     unusedTime += delta;
     loopTimestamp = now;
-    if (unusedTime > MAX_CATCH_UPS) unusedTime = MAX_CATCH_UPS;
+    if (unusedTime > MAX_UNUSED_TIME) unusedTime = MAX_UNUSED_TIME;
     while (unusedTime >= TICK) {
-        simulation();
+        gameloop();
         unusedTime -= TICK;
     }
 
-    setImmediate(gameloop);
+    setImmediate(simulation);
 }
 
-gameloop();
+simulation();
 
 // we don't need to change these
 setInterval(maintainloop, 200);
