@@ -5122,8 +5122,7 @@ let websockets = (() => {
 // Bring it to life
 
 // game loop settings here
-const TPS = 30;
-const TICK = 1000 / TPS;
+const TICK = 1000 / c.TPS; 
 const MAX_UNUSED_TIME = 1000;
 const MAX_DELTA = 40;
 
