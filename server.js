@@ -4750,7 +4750,7 @@ var maintainloop = (() => {
                     let skillpoints = 40;
                     let botUpgrades = upgrades.flat();
                     let upgrade = botUpgrades[Math.floor(Math.random() * botUpgrades.length)];
-                    let skill_cap = upgrade.SKILL_CAP || [9,9,9,9,9,9,9,9,9,9];
+                    let skill_cap = upgrade.SKILL_CAP || [9,9,9,9,9,9,9,9,9,9]
                     let skills = {
                         rld: 0,
                         pen: 0,
@@ -4764,6 +4764,7 @@ var maintainloop = (() => {
                         rgn: 0,
                         mob: 0,
                     }
+
                     while (skillpoints > 0) {
                         let s = Object.keys(skills)[Math.floor(Math.random() * Object.keys(skills).length)];
                         let s_i = Object.keys(skills).indexOf(s)
@@ -4772,10 +4773,16 @@ var maintainloop = (() => {
                             skillpoints--;
                         }
                     }
+
+                    // debug
+
+                    // for (let s in skills) {
+                    //     util.debug(`Skill: ${s}, value: ${skills[s]}`);
+                    // }
+                    
                     if (skillpoints < 0) throw new Error('invalid skill points');
-                    o.color = 17;
-                    o.define(upgrade === Class.smash ? Class.ramBot : Class.bot);
-                    // o.define(Class.basic)
+                    if (upgrade.IS_SMASHER === undefined) upgrade.IS_SMASHER = false;
+                    o.define(upgrade.IS_SMASHER ? Class.ramBot : Class.bot);
                     o.define(upgrade);
                     o.define({ 
                         SKILL: [
