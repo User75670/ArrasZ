@@ -99,6 +99,6 @@
   "GLASS_HEALTH_FACTOR": 2,
   "ZOMBIE": false,
   "BASE_PROTECTORS": true,
-  "BASE_PROTECTOR": "baseProtector2",
+  "BASE_PROTECTOR": "baseProtector3",
   "BOT_PREFIX": ""
 }

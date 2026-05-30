@@ -4715,8 +4715,8 @@ var maintainloop = (() => {
         // Make base protectors if needed.
         if (c.BASE_PROTECTORS) {
             let f = (loc, team) => { 
-                let o = new Entity(loc);
-                if (typeof c.BASE_PROTECTOR !== 'string' || !Class[c.BASE_PROTECTOR]) throw new Error('invalid base protector');
+                    let o = new Entity(loc);
+                    if (typeof c.BASE_PROTECTOR !== 'string' || !Class[c.BASE_PROTECTOR]) throw new Error('invalid base protector');
                     o.define(Class[c.BASE_PROTECTOR]);
                     o.team = -team;
                     o.color = [10, 11, 12, 15][team-1];
@@ -4743,24 +4743,26 @@ var maintainloop = (() => {
             spawnBosses(census);
             // Bots
                 if (bots.length < c.BOTS) {
+                    const {upgrades} = require('./lib/definitions');
                     let botTeams = [0, 1, 2, 3, 4]
                     let team = botTeams[Math.floor(Math.random() * (teams + 1))];
                     let o = new Entity(room.random());
                     let skillpoints = 40;
-                    let upgrades = [Class.basic, ...Class.basic.UPGRADES_TIER_1, ...Class.basic.UPGRADES_TIER_2, ...Class.basic.UPGRADES_TIER_3];
-                    let upgrade = upgrades[Math.floor(Math.random() * upgrades.length)];
-                    let skill_cap = upgrade.SKILL_CAP || [9,9,9,9,9,9,9,9,9,9]
+                    let botUpgrades = upgrades.flat();
+                    let upgrade = botUpgrades[Math.floor(Math.random() * botUpgrades.length)];
+                    let skill_cap = upgrade.SKILL_CAP || [9,9,9,9,9,9,9,9,9,9];
                     let skills = {
-                        dmg: 0,
-                        hlth: 0,
-                        bspd: 0,
-                        bhl: 0,
-                        bpn: 0,
-                        bdmg: 0,
                         rld: 0,
+                        pen: 0,
+                        str: 0,
+                        dam: 0,
                         spd: 0,
+    
+                        shi: 0,
+                        atk: 0,
+                        hlt: 0,
                         rgn: 0,
-                        shd: 0
+                        mob: 0,
                     }
                     while (skillpoints > 0) {
                         let s = Object.keys(skills)[Math.floor(Math.random() * Object.keys(skills).length)];
@@ -4777,16 +4779,17 @@ var maintainloop = (() => {
                     o.define(upgrade);
                     o.define({ 
                         SKILL: [
-                            skills.dmg,
-                            skills.hlth,
-                            skills.bspd,
-                            skills.bhl,
-                            skills.bpn,
-                            skills.bdmg,
                             skills.rld,
+                            skills.pen,
+                            skills.str,
+                            skills.dam,
                             skills.spd,
+
+                            skills.shi,
+                            skills.atk,
+                            skills.hlt,
                             skills.rgn,
-                            skills.shd
+                            skills.mob
                         ], 
                         LEVEL: 45
                     })
