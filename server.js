@@ -4778,7 +4778,7 @@ var maintainloop = (() => {
                             skillpoints--;
                         }
                     }
-                    if (skillpoints < 0) throw new Error('invalid skill points');
+                    if (skillpoints < 0) throw new Error('invalid skill points'); // for future use
 
                     // debug
 
@@ -4786,7 +4786,7 @@ var maintainloop = (() => {
                     //     util.debug(`Skill: ${s}, value: ${skills[s]}`);
                     // }
                     
-                    if (upgrade.IS_SMASHER == undefined || upgrade.IS_SMASHER == null) upgrade.IS_SMASHER = false;
+                    if (upgrade.IS_SMASHER == undefined) upgrade.IS_SMASHER = false;
                     o.define(upgrade.IS_SMASHER ? Class.ramBot : Class.bot);
                     o.define(upgrade);
                     o.define({ 
