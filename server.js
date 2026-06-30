@@ -4660,7 +4660,7 @@ var maintainloop = (() => {
                         cell !== 'bas3' &&
                         cell !== 'bas4'
                     ) && 
-                        Math.random() >= (c.P_TILE_CHANCE_1HZ / 100 / (1000 / room.maintainloopSpeed)) &&
+                        Math.random() <= (c.P_TILE_CHANCE_1HZ / 100 / (1000 / room.maintainloopSpeed)) &&
                         room.poisonedTiles < c.MAX_POISONED_TILES
 
                 ) {
