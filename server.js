@@ -44,11 +44,11 @@ if (map.setup.length <= 0) throw new Error('invalid setup length');
 if (!Array.isArray(map.setup[0])) throw new Error('invalid setup row (first row)');
 
 const setup = map.setup;
-const mapHeight = map.height;
-const mapWidth = map.width;
+let mapHeight = map.height;
+let mapWidth = map.width;
 const ygrid = setup.length;
 const xgrid = setup[0].length;
-const teams = map.teams; 
+let teams = map.teams; 
 if ((typeof mapHeight !== 'number' || typeof mapWidth !== 'number') && mapHeight <= 0 || mapWidth <= 0 || !Number.isFinite(mapWidth) || !Number.isFinite(mapHeight)) 
     {mapHeight = 1500; mapWidth = 1500; util.warn('Invalid map width or height. Reverting to default')};
 
@@ -67,6 +67,12 @@ const room = {
     ygrid: ygrid,
     gameMode: c.MODE,   
     skillBoost: c.SKILL_BOOST,
+    poisonedTiles: 0,
+    p_tiles_before: p.now(),
+    tiles: setup.map(row => row.map(() => ({
+        poisoned: false,
+        timePassed: 0,
+    }))),
     scale: {
         square: mapWidth * mapHeight / 100000000,
         linear: Math.sqrt(mapWidth * mapHeight / 100000000),
@@ -2409,6 +2415,14 @@ class Entity {
                 !this.spectator
             ) { this.kill(); }
         }
+        if (c.POISON_TILES && room.isInRoom(this)) {
+            let y = Math.floor(this.y * room.ygrid / room.height);
+            let x = Math.floor(this.x * room.xgrid / room.width);
+
+            if (room.tiles[y][x].poisoned) {
+                this.health.amount -= this.health.getDamage(2 / roomSpeed);
+            }
+        }
     }
 
     contemplationOfMortality() {
@@ -4634,6 +4648,43 @@ var maintainloop = (() => {
         for (let i=Math.ceil(rockcount * 0.5); i; i--) { count++; placeRoid('rock', Class.babyObstacle); }
         util.log('Placing ' + count + ' obstacles!');
     }
+    function poisonTiles() {
+        if (room.poisonedTiles > c.MAX_POISONED_TILES) return;
+        let j = 0;
+        room.setup.forEach(row => { 
+            let i = 0;
+            row.forEach(cell => {
+                if (!room.tiles[j][i].poisoned && Math.random() < (c.P_TILE_CHANCE_5HZ / 100) && (cell !== 'bas1' && cell !== 'bas2' && cell !== 'bas3' && cell !== 'bas4')) { 
+                    room.tiles[j][i].poisoned = true;
+                    room.tiles[j][i].timePassed = 0;
+                    room.poisonedTiles++;
+                    sockets.broadcast('A tile has been poisoned!');
+                }
+                i++;
+            });
+            j++;
+        });
+    }
+    function unpoisonTiles(delta) {
+        let j = 0;
+        room.setup.forEach(row => { 
+            let i = 0;
+            row.forEach(cell => {
+                if (room.tiles[j][i].poisoned){
+                    room.tiles[j][i].timePassed += delta;
+
+                    if (room.tiles[j][i].timePassed > (c.MAX_POISONED_TILE_TIME * 1000)) { 
+                        room.tiles[j][i].poisoned = false;
+                        room.tiles[j][i].timePassed = 0;
+                        room.poisonedTiles--;
+                        sockets.broadcast('A tile has been unpoisoned!');
+                    }
+                }
+                i++;
+            });
+            j++;
+        });
+    }
     placeRoids();
     // Spawning functions
     let spawnBosses = (() => {
@@ -5049,6 +5100,15 @@ var maintainloop = (() => {
         // Do stuff
         makenpcs();      
         makefood(); 
+        if (c.POISON_TILES) {
+            const now = p.now();
+            const delta = now - room.p_tiles_before;
+            room.p_tiles_before = now;
+            unpoisonTiles(delta);
+            poisonTiles();
+
+            
+        }
         // Regen health and update the grid
         entities.forEach(instance => {
             if (instance.shield.max) {
