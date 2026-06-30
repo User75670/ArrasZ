@@ -4665,7 +4665,7 @@ var maintainloop = (() => {
                     room.tiles[j][i].poisoned = true;
                     room.tiles[j][i].timePassed = 0;
                     room.poisonedTiles++;
-                    sockets.broadcast('A tile has been poisoned!');
+                    sockets.broadcast(`Tile at x: ${i}, y: ${j} has been poisoned!`);
                 }
                 i++;
             });
@@ -4684,7 +4684,7 @@ var maintainloop = (() => {
                         room.tiles[j][i].poisoned = false;
                         room.tiles[j][i].timePassed = 0;
                         room.poisonedTiles--;
-                        sockets.broadcast('A tile has been unpoisoned!');
+                        sockets.broadcast(`Tile at x: ${i}, y: ${j} has been unpoisoned!`);
                     }
                 }
                 i++;
@@ -4835,6 +4835,9 @@ var maintainloop = (() => {
                         if (skills[s] < skill_cap[s_i]) {
                             skills[s]++;
                             skillpoints--;
+                        }
+                        if (Object.values(skills).every((v, i) => v >= skill_cap[i])) {
+                            break;
                         }
                     }
                     if (skillpoints < 0) throw new Error('invalid skill points'); // for future use
