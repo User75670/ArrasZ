@@ -3503,8 +3503,14 @@ const sockets = (() => {
                     socket.camera.x = body.x; socket.camera.y = body.y; socket.camera.fov = 2000;
                     // Mark it as spawned
                     socket.status.hasSpawned = true;
-                    body.sendMessage('You have spawned! Welcome to the game.');
+                    body.sendMessage('You have spawned! Welcome to the ArrasZ.');
                     body.sendMessage('You will be invulnerable until you move or shoot.');
+                    body.sendMessage(c.POISON_TILES ? 'Poisoned tiles are enabled' : 'Poison tiles are disabled');
+                    if (c.POISON_TILES) {
+                        body.sendMessage(`Poisoned tile chance per 200 ms (5 Hz): ${c.P_TILE_CHANCE_5HZ}%`);
+                        body.sendMessage(`Max poisoned tile time: ${c.MAX_POISONED_TILE_TIME} seconds`);
+                        body.sendMessage(`Max poisoned tiles: ${c.MAX_POISONED_TILES}`);
+                    }
                     // Move the client camera
                     socket.talk('c', socket.camera.x, socket.camera.y, socket.camera.fov);
                     return player;
@@ -4650,7 +4656,7 @@ var maintainloop = (() => {
     }
     function poisonTiles() {
         let j = 0;
-        if (Math.random() >= (c.P_TILE_CHANCE_1HZ / 100 / (1000 / room.maintainloopSpeed))) return;
+        if (Math.random() >= (c.P_TILE_CHANCE_5HZ / 100)) return;
         let chosenOne = room.tiles[Math.floor(Math.random() * room.ygrid)][Math.floor(Math.random() * room.xgrid)];
         while (chosenOne.poisoned || (chosenOne.type === 'bas1' || chosenOne.type === 'bas2' || chosenOne.type === 'bas3' || chosenOne.type === 'bas4')) {
             chosenOne = room.tiles[Math.floor(Math.random() * room.ygrid)][Math.floor(Math.random() * room.xgrid)];
