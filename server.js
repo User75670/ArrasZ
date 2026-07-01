@@ -4657,7 +4657,15 @@ var maintainloop = (() => {
     function poisonTiles() {
         if (Math.random() >= (c.POISONED_TILE_CHANCE_5HZ / 100)) return;
         let chosenOne = room.tiles[Math.floor(Math.random() * room.ygrid)][Math.floor(Math.random() * room.xgrid)];
-        while (chosenOne.poisoned || (chosenOne.type === 'bas1' || chosenOne.type === 'bas2' || chosenOne.type === 'bas3' || chosenOne.type === 'bas4')) {
+        while (
+            chosenOne.poisoned || 
+            (
+                chosenOne.type === 'bas1' || 
+                chosenOne.type === 'bas2' || 
+                chosenOne.type === 'bas3' || 
+                chosenOne.type === 'bas4'
+            )
+        ) {
             chosenOne = room.tiles[Math.floor(Math.random() * room.ygrid)][Math.floor(Math.random() * room.xgrid)];
         }
         let y = 0;

@@ -15,7 +15,7 @@
   "MODE": "tdm",
   "RANDOM_COLORS": false,
   "BANNED_CHARACTER_REGEX": "/[\uFDFD\u200E\u0000]/gi", 
-  "MAP": "2tdm",
+  "MAP": "custom2tdm",
   "MAPS": {
     "custom": {
       "height": 3000,
@@ -41,7 +41,7 @@
         [ "roid", "norm", "norm", "roid" ]
       ]
     },
-    "2tdm": {
+    "old2tdm": {
       "height": 8000,
       "width": 8000,
       "mode": "tdm",
@@ -60,6 +60,27 @@
         ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
         ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
         ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"]
+      ]
+    },
+    "custom2tdm":{
+      "height": 8000,
+      "width": 8000,
+      "mode": "tdm",
+      "teams": 2,
+      "setup": [
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "norm", "norm", "roid", "nest", "roid", "norm", "norm", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "norm", "roid", "nest", "nest", "nest", "roid", "norm", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "roid", "nest", "nest", "nest", "nest", "nest", "roid", "norm", "norm", "bas2"],
+        ["bas1", "norm", "roid", "nest", "nest", "nest", "nest", "nest", "nest", "nest", "roid", "norm", "bas2"],
+        ["bas1", "norm", "norm", "roid", "nest", "nest", "nest", "nest", "nest", "roid", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "norm", "roid", "nest", "nest", "nest", "roid", "norm", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "norm", "norm", "roid", "nest", "roid", "norm", "norm", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "bas2"],
+        ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"]
       ]
     }
   },
@@ -100,7 +121,7 @@
   "BOTS": 6,
   "GLASS_HEALTH_FACTOR": 2,
   "BASE_PROTECTORS": true,
-  "BASE_PROTECTOR": "baseProtector3",
+  "BASE_PROTECTOR": "baseProtector",
   "BOT_PREFIX": "",
   "POISON_TILES": false,
   "MAX_POISONED_TILES": 2,
