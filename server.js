@@ -106,6 +106,7 @@ const room = {
     room.findType('bas4');
     room.findType('roid');
     room.findType('rock');
+    room.findType('grav');
     room.nestFoodAmount = 1.5 * Math.sqrt(room.nest.length) / room.xgrid / room.ygrid;
     room.random = () => {
         return {
@@ -4647,11 +4648,15 @@ var maintainloop = (() => {
         // Start placing them
         let roidcount = room.roid.length * room.width * room.height / room.xgrid / room.ygrid / 50000 / 1.5;
         let rockcount = room.rock.length * room.width * room.height / room.xgrid / room.ygrid / 250000 / 1.5;
+        let gravcount = room.grav.length * room.width * room.height / room.xgrid / room.ygrid / 250000 / 1.5;
         let count = 0;
         for (let i=Math.ceil(roidcount); i; i--) { count++; placeRoid('roid', Class.obstacle); }
         for (let i=Math.ceil(roidcount * 0.3); i; i--) { count++; placeRoid('roid', Class.babyObstacle); }
         for (let i=Math.ceil(rockcount * 0.8); i; i--) { count++; placeRoid('rock', Class.obstacle); }
         for (let i=Math.ceil(rockcount * 0.5); i; i--) { count++; placeRoid('rock', Class.babyObstacle); }
+        for (let i=Math.ceil(gravcount * 0.15); i; i--) { count++; placeRoid('grav', Class.babyObstacle); }
+        for (let i=Math.ceil(gravcount * 0.05); i; i--) { count++; placeRoid('grav', Class.obstacle); }
+
         util.log('Placing ' + count + ' obstacles!');
     }
     function poisonTiles() {

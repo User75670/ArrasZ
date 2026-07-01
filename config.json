@@ -15,7 +15,7 @@
   "MODE": "tdm",
   "RANDOM_COLORS": false,
   "BANNED_CHARACTER_REGEX": "/[\uFDFD\u200E\u0000]/gi", 
-  "MAP": "custom2tdm",
+  "MAP": "2tdm",
   "MAPS": {
     "custom": {
       "height": 3000,
@@ -42,8 +42,8 @@
       ]
     },
     "old2tdm": {
-      "height": 8000,
-      "width": 8000,
+      "height": 9000,
+      "width": 9000,
       "mode": "tdm",
       "teams": 2,
       "setup": [
@@ -62,24 +62,45 @@
         ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"]
       ]
     },
+    "2tdm": {
+      "height": 9000,
+      "width": 9000,
+      "mode": "tdm",
+      "teams": 2,
+      "setup": [
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["bas1", "grav", "grav", "grav", "grav", "nest", "nest", "nest", "grav", "grav", "grav", "grav", "bas2"],
+        ["bas1", "grav", "grav", "grav", "grav", "nest", "nest", "nest", "grav", "grav", "grav", "grav", "bas2"],
+        ["bas1", "grav", "grav", "grav", "grav", "nest", "nest", "nest", "grav", "grav", "grav", "grav", "bas2"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"],
+        ["grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav", "grav"]
+      ]
+    },
     "custom2tdm":{
-      "height": 8000,
-      "width": 8000,
+      "height": 9000,
+      "width": 9000,
       "mode": "tdm",
       "teams": 2,
       "setup": [
         ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"],
-        ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "norm", "norm", "norm", "roid", "norm", "norm", "norm", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "norm", "norm", "roid", "nest", "roid", "norm", "norm", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "norm", "roid", "nest", "nest", "nest", "roid", "norm", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "roid", "nest", "nest", "nest", "nest", "nest", "roid", "norm", "norm", "bas2"],
-        ["bas1", "norm", "roid", "nest", "nest", "nest", "nest", "nest", "nest", "nest", "roid", "norm", "bas2"],
-        ["bas1", "norm", "norm", "roid", "nest", "nest", "nest", "nest", "nest", "roid", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "norm", "roid", "nest", "nest", "nest", "roid", "norm", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "norm", "norm", "roid", "nest", "roid", "norm", "norm", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "norm", "norm", "norm", "rock", "norm", "norm", "norm", "norm", "norm", "bas2"],
-        ["bas1", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "norm", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "nest", "roid", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "nest", "nest", "nest", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "nest", "nest", "nest", "nest", "nest", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "nest", "nest", "nest", "nest", "nest", "nest", "nest", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "nest", "nest", "nest", "nest", "nest", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "nest", "nest", "nest", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "nest", "roid", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"],
+        ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"],
         ["bas1", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "roid", "bas2"]
       ]
     }
