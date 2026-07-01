@@ -71,7 +71,8 @@ const room = {
     tiles: setup.map(row => row.map(cell => ({
         poisoned: false,
         timePassed: 0,
-        type: cell
+        type: cell,
+        base: true, // only for base tiles
     }))),
     scale: {
         square: map.width * map.height / 100000000,
@@ -83,6 +84,10 @@ const room = {
     },    
     topPlayerID: -1,
 };
+// mimic arras new 2tdm
+room.tiles[6][0].base = false;
+room.tiles[6][12].base = false; 
+
     room.findType = type => {
         let output = [];
         let j = 0;
@@ -4654,7 +4659,7 @@ var maintainloop = (() => {
         for (let i=Math.ceil(roidcount * 0.3); i; i--) { count++; placeRoid('roid', Class.babyObstacle); }
         for (let i=Math.ceil(rockcount * 0.8); i; i--) { count++; placeRoid('rock', Class.obstacle); }
         for (let i=Math.ceil(rockcount * 0.5); i; i--) { count++; placeRoid('rock', Class.babyObstacle); }
-        for (let i=Math.ceil(gravcount * 0.15); i; i--) { count++; placeRoid('grav', Class.babyObstacle); }
+        for (let i=Math.ceil(gravcount * 0.1); i; i--) { count++; placeRoid('grav', Class.babyObstacle); }
         for (let i=Math.ceil(gravcount * 0.05); i; i--) { count++; placeRoid('grav', Class.obstacle); }
 
         util.log('Placing ' + count + ' obstacles!');
@@ -4803,7 +4808,11 @@ var maintainloop = (() => {
                     o.color = [10, 11, 12, 15][team-1];
             };
             for (let i=1; i<=teams; i++) {
-                room['bas' + i].forEach((loc) => { f(loc, i); }); 
+                room['bas' + i].forEach((loc) => { 
+                    let x = Math.floor(loc.x * room.ygrid / room.height);
+                    let y = Math.floor(loc.y * room.xgrid / room.width);
+                    if (room.tiles[y][x].base) f(loc, i); 
+                }); 
             }}
         // Return the spawning function
         let bots = [];
