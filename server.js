@@ -2419,7 +2419,7 @@ class Entity {
             let y = Math.floor(this.y * room.ygrid / room.height);
             let x = Math.floor(this.x * room.xgrid / room.width);
 
-            if (room.tiles[y][x].poisoned) {
+            if (room.tiles[y][x].poisoned && !this.settings.godmode && !this.spectator) {
                 this.health.amount -= this.health.getDamage(2 / roomSpeed);
             }
         }
@@ -3507,7 +3507,7 @@ const sockets = (() => {
                     body.sendMessage('You will be invulnerable until you move or shoot.');
                     body.sendMessage(c.POISON_TILES ? 'Poisoned tiles are enabled' : 'Poison tiles are disabled');
                     if (c.POISON_TILES) {
-                        body.sendMessage(`Poisoned tile chance per 200 ms (5 Hz): ${c.P_TILE_CHANCE_5HZ}%`);
+                        body.sendMessage(`Poisoned tile chance per 200 ms (5 Hz): ${c.POISONED_TILE_CHANCE_5HZ}%`);
                         body.sendMessage(`Max poisoned tile time: ${c.MAX_POISONED_TILE_TIME} seconds`);
                         body.sendMessage(`Max poisoned tiles: ${c.MAX_POISONED_TILES}`);
                     }
@@ -4655,47 +4655,47 @@ var maintainloop = (() => {
         util.log('Placing ' + count + ' obstacles!');
     }
     function poisonTiles() {
-        let j = 0;
-        if (Math.random() >= (c.P_TILE_CHANCE_5HZ / 100)) return;
+        if (Math.random() >= (c.POISONED_TILE_CHANCE_5HZ / 100)) return;
         let chosenOne = room.tiles[Math.floor(Math.random() * room.ygrid)][Math.floor(Math.random() * room.xgrid)];
         while (chosenOne.poisoned || (chosenOne.type === 'bas1' || chosenOne.type === 'bas2' || chosenOne.type === 'bas3' || chosenOne.type === 'bas4')) {
             chosenOne = room.tiles[Math.floor(Math.random() * room.ygrid)][Math.floor(Math.random() * room.xgrid)];
         }
+        let y = 0;
         room.setup.forEach(row => { 
-            let i = 0;
+            let x = 0;
             row.forEach(cell => {
                 if (
-                    room.tiles[j][i] === chosenOne &&
+                    room.tiles[y][x] === chosenOne &&
                     room.poisonedTiles < c.MAX_POISONED_TILES
                 ) {
-                    room.tiles[j][i].poisoned = true;
-                    room.tiles[j][i].timePassed = 0;
+                    room.tiles[y][x].poisoned = true;
+                    room.tiles[y][x].timePassed = 0;
                     room.poisonedTiles++;
-                    sockets.broadcast(`Tile at x: ${i}, y: ${j} has been poisoned!`);
+                    sockets.broadcast(`Tile at x: ${x}, y: ${y} has been poisoned!`);
                 }
-                i++;
+                x++;
             });
-            j++;
+            y++;
         });
     }
     function unpoisonTiles(delta) {
-        let j = 0;
+        let y = 0;
         room.setup.forEach(row => { 
-            let i = 0;
+            let x = 0;
             row.forEach(cell => {
-                if (room.tiles[j][i].poisoned){
-                    room.tiles[j][i].timePassed += delta;
+                if (room.tiles[y][x].poisoned){
+                    room.tiles[y][x].timePassed += delta;
 
-                    if (room.tiles[j][i].timePassed > (c.MAX_POISONED_TILE_TIME * 1000)) { 
-                        room.tiles[j][i].poisoned = false;
-                        room.tiles[j][i].timePassed = 0;
+                    if (room.tiles[y][x].timePassed > (c.MAX_POISONED_TILE_TIME * 1000)) { 
+                        room.tiles[y][x].poisoned = false;
+                        room.tiles[y][x].timePassed = 0;
                         room.poisonedTiles--;
-                        sockets.broadcast(`Tile at x: ${i}, y: ${j} has been unpoisoned!`);
+                        sockets.broadcast(`Tile at x: ${x}, y: ${y} has been unpoisoned!`);
                     }
                 }
-                i++;
+                x++;
             });
-            j++;
+            y++;
         });
     }
     placeRoids();
@@ -4814,9 +4814,9 @@ var maintainloop = (() => {
                     const {upgrades} = require('./lib/definitions');
 
                     let o = new Entity(room.random());
-                    let botTeams = [0, 1, 2, 3, 4]
+                    let botTeams = [1, 2, 3, 4]
                     let team;
-                    if (room.gameMode === 'tdm') team = botTeams[Math.floor(Math.random() * (teams + 1))];
+                    if (room.gameMode === 'tdm') team = botTeams[Math.floor(Math.random() * (teams))];
                     let skillpoints = 40;
                     let botUpgrades = upgrades.flat();
                     let upgrade = botUpgrades[Math.floor(Math.random() * botUpgrades.length)];
@@ -4873,7 +4873,7 @@ var maintainloop = (() => {
                         ], 
                         LEVEL: 45
                     })
-                    if (room.gameMode === 'tdm') {o.team = -team; o.color = [17, 10, 11, 12, 15][team];} 
+                    if (room.gameMode === 'tdm') {o.team = -team; o.color = [10, 11, 12, 15][team - 1];} 
                     else o.color = 17;
                     o.name += ran.chooseBotName();
                     o.refreshBodyAttributes();
