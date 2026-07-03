@@ -1808,7 +1808,7 @@ class Entity {
         }
         if (set.COLOR != null) { 
             this.color = set.COLOR; 
-        }   
+        }
         if (set.CONTROLLERS != null) { 
             let toAdd = [];
             set.CONTROLLERS.forEach((ioName) => {
