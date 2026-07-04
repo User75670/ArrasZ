@@ -4145,8 +4145,9 @@ const sockets = (() => {
             // Build the returned function
             // This function initalizes the socket upon connection
             return (socket, req) => {
-                // Get information about the new connection and verify it
-                util.log('A client is trying to connect...');
+                const forwarded = req.headers['x-forwarded-for'];
+                socket.ip = (forwarded && String(forwarded.split(',')[0].trim())) || req.socket.remoteAddress;
+
                 // Set it up
                 socket.binaryType = 'arraybuffer';
                 socket.key = '';
@@ -4215,6 +4216,16 @@ const sockets = (() => {
                         socket.send(protocol.encode(message), { binary: true, }, () => setTimeout(() => socket.terminate(), 1000));
                     } 
                 };
+                const bannedIps = JSON.parse(process.env.BANNED_IPS || '[]');
+                // Get information about the new connection and verify it
+                if (bannedIps.some(ip => ip === socket.ip)) {
+                    util.log('Banned client trying to connect... Kicking');
+                    socket.kick();
+                    return;
+                }
+                util.log('A client is trying to connect...');
+                util.log('[INFO] New socket opened from ' + socket.ip);
+
                 socket.on('message', message => incoming(message, socket));
                 socket.on('close', () => { socket.loops.terminate(); close(socket); });
                 socket.on('error', e => { util.log('[ERROR]:'); util.error(e); });
