@@ -568,7 +568,7 @@ class io_nearestDifferentMaster extends IO {
         let out = entities.map(e => {
             // Only look at those within our view, and our parent's view, not dead, not our kind, not a bullet/trap/block etc
             if (e.health.amount > 0) {
-            if (!e.invuln) {
+            if (!e.invuln && !e.godmode) {
             if (e.master.master.team !== this.body.master.master.team) {
             if (e.master.master.team !== -101) {
             if (e.type === 'tank' || e.type === 'crasher' || (!this.body.aiSettings.shapefriend && e.type === 'food')) {
@@ -615,8 +615,10 @@ class io_nearestDifferentMaster extends IO {
         for (let i=0; i<this.body.guns.length; i++) {
             if (this.body.guns[i].canShoot && !this.body.aiSettings.skynet) {
                 let v = this.body.guns[i].getTracking();
-                tracking = v.speed;
-                range = Math.min(range, v.speed * v.range);
+                let gunSpeed = Math.max(v.speed || 0, 0.01);
+                let gunRange = (v.range != null) ? (v.range * v.range) : (v.range);
+                tracking = gunSpeed;
+                range = Math.min(range, gunRange);
                 break;
             }
         }
