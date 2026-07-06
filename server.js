@@ -1735,6 +1735,7 @@ class Entity {
         this.isBot = false;
         this.spectator = false;
         this.ignoreWalls = false;
+        this.trap = {};
         // This is for collisions
         this.updateAABB = () => {};
         this.getAABB = (() => {
@@ -1923,14 +1924,18 @@ class Entity {
         if (set.INVISIBLE != null) { 
             this.invisible = set.INVISIBLE;
         }
-        if (set.PHASE != null) { 
-            this.settings.phase = set.PHASE; 
-        }
         if (set.DANGER != null) { 
             this.dangerValue = set.DANGER; 
         }
-        if (set.SPECTATOR !== null && typeof set.SPECTATOR === 'boolean') {
+        if (set.SPECTATOR != null) {
             this.spectator = set.SPECTATOR;
+        }
+        if (set.TRAP != null) {
+            if ((set.TRAP.duration === undefined || set.TRAP.who === undefined) && set.TRAP.canTrap != null) set.TRAP.canTrap = false;
+            else if (set.TRAP.canTrap == null) set.TRAP.canTrap == false;
+            this.trap.canTrap = set.TRAP.canTrap;
+            this.trap.duration = set.TRAP.duration;
+            this.trap.who = set.TRAP.who; 
         }
         if (set.VARIES_IN_SIZE != null) { 
             this.settings.variesInSize = set.VARIES_IN_SIZE; 
