@@ -3156,13 +3156,14 @@ const sockets = (() => {
                                         break;
                                     }
                                     case 'teleport': {
-                                        player.body.x += player.target.x; // test
+                                        player.body.x += player.target.x;
                                         player.body.y += player.target.y;
                                         break;
                                     }
                                     case 'maxstats': {
+                                        let skill = player.body.skill.caps || [9, 9, 9, 9, 9, 9, 9, 9, 9, 9];
                                         if (socket.devCheats[socket.cheatInUse].enabled) {
-                                            player.body.define({SKILL: [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]});
+                                            player.body.define({SKILL: skill});
                                         } else {
                                             player.body.define({SKILL: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]});
                                         }
