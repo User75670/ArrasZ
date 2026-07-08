@@ -5,7 +5,7 @@
   "networkUpdateFactor": 24,
   "socketWarningLimit": 5,
   "networkFrontlog": 1,
-  "networkFallbackTime": 150,
+  "networkFallbackTime": 0,
   "visibleListInterval": 1000,
   "gameSpeed": 1,
   "runSpeed": 1.5,
