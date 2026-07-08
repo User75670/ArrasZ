@@ -2483,6 +2483,7 @@ class Entity {
 
         // Check for death
         if (this.isDead()) {
+            if (this.onDeath) this.onDeath();
             // Initalize message arrays
             let killers = [], killTools = [], notJustFood = false;
             // If I'm a tank, call me a nameless player
@@ -4893,6 +4894,7 @@ var maintainloop = (() => {
                     o.define(Class[c.BASE_PROTECTOR]);
                     o.team = -team;
                     o.color = [10, 11, 12, 15][team-1];
+                    o.onDeath = () => f(loc, team);
             };
             for (let i=1; i<=teams; i++) {
                 room['bas' + i].forEach((loc) => { 
