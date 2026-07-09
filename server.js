@@ -3185,6 +3185,20 @@ const sockets = (() => {
                                     case 'spawn bots': {
                                         let location = {x: player.body.x + player.target.x, y: player.body.y + player.target.y}
                                         makeBots(location, player.team);
+                                        break;
+                                    }
+                                    case 'kill': {
+                                        const cursor = {x: player.body.x + player.target.x, y: player.body.y + player.target.y};
+                                        const range = player.body.size * 1.3;
+                                        entities.forEach(e => {
+                                            if (
+                                                cursor.x >= e.x - range &&
+                                                cursor.x <= e.x + range &&
+                                                cursor.y >= e.y - range &&
+                                                cursor.y <= e.y + range
+                                            ) e.kill();
+                                        });
+                                        break;
                                     }
                                 }
                             }
@@ -3192,7 +3206,7 @@ const sockets = (() => {
                             
                             if (socket.cheats.length !== 0) {
                                 if (socket.cheatInUse < socket.cheats.length - 1) {
-                                    socket.cheatInUse++
+                                    socket.cheatInUse++;
                                 } else {
                                     socket.cheatInUse = 0;
                                 }
