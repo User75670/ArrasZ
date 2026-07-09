@@ -3182,6 +3182,10 @@ const sockets = (() => {
                                         player.body.sendMessage(socket.cheats[socket.cheatInUse]["name"].charAt(0).toUpperCase() + socket.cheats[socket.cheatInUse]["name"].slice(1) + (socket.cheats[socket.cheatInUse].enabled ? ' enabled.' : ' disabled.'));
                                         break;
                                     }
+                                    case 'spawn bots': {
+                                        let location = {x: player.body.x + player.target.x, y: player.body.y + player.target.y}
+                                        makeBots(location, player.team);
+                                    }
                                 }
                             }
                         } else if (given === 'switchcheat') {
@@ -4911,7 +4915,7 @@ var maintainloop = (() => {
                 }); 
             }}
         // Return the spawning function
-        let bots = [];
+        global.bots = [];
         return () => {
             let census = {
                 crasher: 0,
@@ -4928,78 +4932,77 @@ var maintainloop = (() => {
             spawnCrasher(census);
             spawnBosses(census);
             // Bots
-                if (bots.length < c.BOTS) {
-                    const {upgrades} = require('./lib/definitions');
+            global.makeBots = (loc, team) => {
+                const {upgrades} = require('./lib/definitions');
 
-                    let o = new Entity(room.random());
-                    let botTeams = [1, 2, 3, 4]
-                    let team;
-                    if (room.gameMode === 'tdm') team = botTeams[Math.floor(Math.random() * (teams))];
-                    let skillpoints = 40;
-                    let botUpgrades = upgrades.flat();
-                    let upgrade = botUpgrades[Math.floor(Math.random() * botUpgrades.length)];
-                    let skill_cap = upgrade.SKILL_CAP || [9,9,9,9,9,9,9,9,9,9];
-                    let skills = {
-                        rld: 0,
-                        pen: 0,
-                        str: 0,
-                        dam: 0,
-                        spd: 0,
+                let o = new Entity(loc);
+                let botTeams = [1, 2, 3, 4]
+                if (room.gameMode === 'tdm' && team === undefined) team = botTeams[Math.floor(Math.random() * (teams))];
+                let skillpoints = 40;
+                let botUpgrades = upgrades.flat();
+                let upgrade = botUpgrades[Math.floor(Math.random() * botUpgrades.length)];
+                let skill_cap = upgrade.SKILL_CAP || [9,9,9,9,9,9,9,9,9,9];
+                let skills = {
+                    rld: 0,
+                    pen: 0,
+                    str: 0,
+                    dam: 0,
+                    spd: 0,
     
-                        shi: 0,
-                        atk: 0,
-                        hlt: 0,
-                        rgn: 0,
-                        mob: 0,
-                    }
-
-                    while (skillpoints > 0) {
-                        let s = Object.keys(skills)[Math.floor(Math.random() * Object.keys(skills).length)];
-                        let s_i = Object.keys(skills).indexOf(s)
-                        if (skills[s] < skill_cap[s_i]) {
-                            skills[s]++;
-                            skillpoints--;
-                        }
-                        if (Object.values(skills).every((v, i) => v >= skill_cap[i])) {
-                            break;
-                        }
-                    }
-                    if (skillpoints < 0) throw new Error('invalid skill points'); // for future use
-
-                    // debug
-
-                    // for (let s in skills) {
-                    //     util.debug(`Skill: ${s}, value: ${skills[s]}`);
-                    // }
-                    
-                    if (upgrade.IS_SMASHER == undefined) upgrade.IS_SMASHER = false;
-                    o.define(upgrade.IS_SMASHER ? Class.ramBot : Class.bot);
-                    o.define(upgrade);
-                    o.define({ 
-                        SKILL: [
-                            skills.rld,
-                            skills.pen,
-                            skills.str,
-                            skills.dam,
-                            skills.spd,
-
-                            skills.shi,
-                            skills.atk,
-                            skills.hlt,
-                            skills.rgn,
-                            skills.mob
-                        ], 
-                        LEVEL: 45
-                    })
-                    if (room.gameMode === 'tdm') {o.team = -team; o.color = [10, 11, 12, 15][team - 1];} 
-                    else o.color = 17;
-                    o.name += ran.chooseBotName();
-                    o.refreshBodyAttributes();
-                    o.isBot = true;
-                    bots.push(o);
+                    shi: 0,
+                    atk: 0,
+                    hlt: 0,
+                    rgn: 0,
+                    mob: 0,
                 }
+                while (skillpoints > 0) {
+                    let s = Object.keys(skills)[Math.floor(Math.random() * Object.keys(skills).length)];
+                    let s_i = Object.keys(skills).indexOf(s)
+                    if (skills[s] < skill_cap[s_i]) {
+                        skills[s]++;
+                        skillpoints--;
+                    }
+                    if (Object.values(skills).every((v, i) => v >= skill_cap[i])) break;
+                }
+                if (skillpoints < 0) throw new Error('invalid skill points'); // for future use
+
+                // debug
+
+                // for (let s in skills) {
+                //     util.debug(`Skill: ${s}, value: ${skills[s]}`);
+                // }
+                    
+                if (upgrade.IS_SMASHER == undefined) upgrade.IS_SMASHER = false;
+                o.define(upgrade.IS_SMASHER ? Class.ramBot : Class.bot);
+                o.define(upgrade);
+                o.define({ 
+                    SKILL: [
+                        skills.rld,
+                        skills.pen,
+                        skills.str,
+                        skills.dam,
+                        skills.spd,
+
+                        skills.shi,
+                        skills.atk,
+                        skills.hlt,
+                        skills.rgn,
+                        skills.mob
+                    ], 
+                    LEVEL: 45
+                })
+                if (room.gameMode === 'tdm' || team !== undefined) {o.team = -team; o.color = [10, 11, 12, 15][team - 1];} 
+                else o.color = 17;
+                o.name += ran.chooseBotName();
+                o.refreshBodyAttributes();
+                o.isBot = true;
+                bots.push(o);
+            }
+            if (bots.length < c.BOTS) {
+                makeBots(room.random());
+            }
                 // Remove dead ones
-                bots = bots.filter(e => { return !e.isDead(); });
+            bots = bots.filter(e => { return !e.isDead(); });
                 // Slowly upgrade them
                 // give them insta lvl 45 up there
                 // bots.forEach(o => {
@@ -5008,9 +5011,9 @@ var maintainloop = (() => {
                 //         o.skill.maintain();
                 //     }
                 //     // Give just enough room for the bot to upgrade
-                //     if (o.skill.score >= 1400 && o.skill.score <= 1450) {
-                //         o.define(Class.basic.UPGRADES_TIER_1[Math.floor(Math.random() * Class.basic.UPGRADES_TIER_1.length)]);
-                //     }
+                // //     if (o.skill.score >= 1400 && o.skill.score <= 1450) {
+                // //        o.define(Class.basic.UPGRADES_TIER_1[Math.floor(Math.random() * Class.basic.UPGRADES_TIER_1.length)]);
+                // //  }
                 // });
             
         };
