@@ -68,7 +68,6 @@ const room = {
     gameMode: map.mode,   
     skillBoost: c.SKILL_BOOST,
     poisonedTiles: 0,
-    p_tiles_before: p.now(),
     tiles: setup.map(row => row.map(cell => ({
         poisoned: false,
         timePassed: 0,
@@ -3183,8 +3182,8 @@ const sockets = (() => {
                                         break;
                                     }
                                     case 'spawn bots': {
-                                        let location = {x: player.body.x + player.target.x, y: player.body.y + player.target.y}
-                                        makeBots(location, player.team);
+                                        const cursor = {x: player.body.x + player.target.x, y: player.body.y + player.target.y}
+                                        makeBots(cursor, player.team);
                                         break;
                                     }
                                     case 'kill': {
@@ -4745,6 +4744,7 @@ var gameloop = (() => {
     //roomSpeed = c.gameSpeed * alphaFactor;
     //setTimeout(moveloop, 1000 / roomSpeed / 30 - delta); 
 })();
+let p_tiles_before = p.now();
 // A less important loop. Runs at an actual 5Hz regardless of game speed.
 var maintainloop = (() => {
     // Place obstacles
@@ -5254,12 +5254,10 @@ var maintainloop = (() => {
         makefood(); 
         if (c.POISON_TILES) {
             const now = p.now();
-            const delta = now - room.p_tiles_before;
-            room.p_tiles_before = now;
+            const delta = now - p_tiles_before;
+            p_tiles_before = now;
             unpoisonTiles(delta);
             poisonTiles();
-
-            
         }
         // Regen health and update the grid
         entities.forEach(instance => {
