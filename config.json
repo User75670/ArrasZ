@@ -140,7 +140,7 @@
   "MIN_SPEED": 0.001,
   "FOOD_AMOUNT": 0.2, 
   "SKILL_BOOST": 5,
-  "BOTS": 6,
+  "BOTS": 20,
   "GLASS_HEALTH_FACTOR": 2,
   "BASE_PROTECTORS": true,
   "BASE_PROTECTOR": "baseProtector",
@@ -151,6 +151,6 @@
   "MAX_POISONED_TILE_TIME": 60,
   "DEVELOPER_CHEATS": ["godmode", "no recoil", "max stats", "teleport", "spawn bots", "kill", "heal", "grow", "shrink", "zoom out", "zoom in", "kick", "tempban"],
   "BETA_TESTER_CHEATS": ["max stats", "no recoil", "teleport", "spawn bots", "zoom out", "zoom in"],
-  "DEV_CLASS": "testbed",
+  "DEV_CLASS": "developer",
   "BT_CLASS": "betatester"
 }

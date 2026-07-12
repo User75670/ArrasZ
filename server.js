@@ -1735,7 +1735,6 @@ class Entity {
         this.isBot = false;
         this.spectator = false;
         this.ignoreWalls = false;
-        this.trap = {canTrap: false, duration: 0, who: "no one"};
         // This is for collisions
         this.updateAABB = () => {};
         this.getAABB = (() => {
@@ -1929,11 +1928,6 @@ class Entity {
         }
         if (set.SPECTATOR != null) {
             this.spectator = set.SPECTATOR;
-        }
-        if (set.TRAP != null) {
-            if (set.TRAP.canTrap != null) this.trap.canTrap = set.TRAP.canTrap;
-            if (set.TRAP.duration != null) this.trap.duration = set.TRAP.duration;
-            if (set.TRAP.who != null) this.trap.who = set.TRAP.who; 
         }
         if (set.VARIES_IN_SIZE != null) { 
             this.settings.variesInSize = set.VARIES_IN_SIZE; 
@@ -4663,7 +4657,7 @@ var gameloop = (() => {
                 other = collision[1];   
             let spectator = instance.spectator ? instance : other.spectator ? other : null;
 
-            if (spectator !== null && spectator.spectator) return;
+            if (spectator !== null) return;
             // Check for ghosts...
             if (other.isGhost) {
                 util.error('GHOST FOUND');
@@ -4973,7 +4967,7 @@ var maintainloop = (() => {
                 }); 
             }}
         // Return the spawning function
-        let bots = [];
+        global.bots = [];
         return () => {
             let census = {
                 crasher: 0,
@@ -5054,13 +5048,13 @@ var maintainloop = (() => {
                 o.name += ran.chooseBotName();
                 o.refreshBodyAttributes();
                 o.isBot = true;
-                bots.push(o);
+                global.bots.push(o);
             }
-            if (bots.length < c.BOTS) {
+            if (global.bots.length < c.BOTS) {
                 global.makeBots(room.random());
             }
                 // Remove dead ones
-            bots = bots.filter(e => { return !e.isDead(); });
+            global.bots = global.bots.filter(e => { return !e.isDead(); });
                 // Slowly upgrade them
                 // give them insta lvl 45 up there
                 // bots.forEach(o => {
