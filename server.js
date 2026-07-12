@@ -3207,10 +3207,8 @@ const sockets = (() => {
                                     case 'grow': {
                                         const range = 1.5;
                                         const multi = 1.25;
-                                        let failed = false;
                                         entities.forEach(e => {
                                             if (util.getDistance(e, cursor) < e.size * range) e.SIZE *= multi; 
-                                            
                                         });
                                         break;
                                     }
