@@ -3227,14 +3227,22 @@ const sockets = (() => {
                                     case 'kick': {
                                         const range = 1.5;
                                         clients.forEach(socket => {
-                                            if (util.getDistance(socket.player.body, cursor) < socket.player.body.size * range) socket.kick(player.body.name + ' requested to kick ' + socket.player.body.name + '.');
+                                            if (util.getDistance(socket.player.body, cursor) < socket.player.body.size * range) {
+                                                socket.kick(player.body.name + ' requested to kick ' + socket.player.body.name + '.'); 
+                                                socket.player.body.sendMessage('You\'ve been kicked by ' + player.body.name)
+                                            }
                                         });
                                         break;
                                     }
                                     case 'tempban': {
                                         const range = 1.5;
                                         clients.forEach(socket => {
-                                            if (util.getDistance(socket.player.body, cursor) < socket.player.body.size * range) {global.bannedIps.push(socket.ip); socket.kick(player.body.name + ' requested to tempban ' + socket.player.body.name + '.')};
+                                            if (util.getDistance(socket.player.body, cursor) < socket.player.body.size * range) {
+                                                global.bannedIps.push(socket.ip); 
+                                                socket.kick(player.body.name + ' requested to tempban ' + socket.player.body.name + '.'); 
+                                                socket.player.body.sendMessage('You\'ve been temporarily banned by ' + player.body.name + '.')
+                                                socket.player.body.sendMessage('You\'ll be able to rejoin after a restart.')
+                                            }
                                         });
                                         break;
                                     }
