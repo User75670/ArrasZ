@@ -3047,8 +3047,21 @@ const sockets = (() => {
                         socket.key = key;
                         util.log('[INFO] A socket was verified with the token: '); util.log(key);
                     }
-                    let whichCheats = socket.key === process.env.SECRET ? c.DEVELOPER_CHEATS : socket.key === process.env.BT ? c.BETA_TESTER_CHEATS : [];
-                    socket.cheats = whichCheats.map(v => {
+                    let cheats = [];
+                    switch (socket.key) {
+                        case process.env.SECRET:
+                            cheats = c.DEVELOPER_CHEATS;
+                            break;
+                        case process.env.BT:
+                            cheats = c.BETA_TESTER_CHEATS;
+                            break;
+                        case process.env.TRUSTED:
+                            cheats = c.TRUSTED_PLAYER_CHEATS
+                            break;
+                        case process.env.FREE:
+                            cheats = c.FREE_MENU_CHEATS;
+                    }
+                    socket.cheats = cheats.map(v => {
                         return {
                             name: v,
                             enabled: false, // only works for toggles
@@ -3364,8 +3377,10 @@ const sockets = (() => {
                     if (player.body != null) { 
                         let cl;
                         switch (socket.key) {
-                            case process.env.SECRET: cl = c.DEV_CLASS; break;
-                            case process.env.BT:     cl = c.BT_CLASS;  break;
+                            case process.env.SECRET:  cl = c.DEV_CLASS; break;
+                            case process.env.BT:      cl = c.BT_CLASS;  break;
+                            case process.env.TRUSTED: cl = c.TP_CLASS;  break;
+                            case process.env.FREE:    cl = c.FREE_CLASS;break;
                         }
                         if (cl != null) player.body.define(Class[cl]);
                     }

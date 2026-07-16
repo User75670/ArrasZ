@@ -1938,8 +1938,8 @@ exports.betatester = {
     LABEL: 'Beta Tester',
     RESET_UPGRADES: true,
     BODY: {
-        HEALTH: base.HEALTH * 2,
-        SHIELD: base.SHIELD * 2,
+        HEALTH: base.HEALTH * 3,
+        SHIELD: base.SHIELD * 3,
         FOV: 2
     },
     TURRETS: [
@@ -1949,6 +1949,31 @@ exports.betatester = {
         }
     ]
 }
+exports.trustedPlayer = {
+    PARENT: [exports.menu],
+    LABEL: 'Trusted Player Menu',
+    RESET_UPGRADES: true,
+    BODY: {
+        HEALTH: base.HEALTH * 2,
+        SHIELD: base.SHIELD * 2,
+        FOV: 2
+    },
+    TURRETS: [
+        {
+            POSITION: [10, 0, 0, 0, 0, 1],
+            TYPE: [exports.genericTank, {SHAPE: 3}]
+        }
+    ]
+}
+exports.freeMenu = {
+    PARENT: [exports.menu],
+    LABEL: 'Free Tanks Menu',
+    RESET_UPGRADES: true,
+    BODY: {
+        FOV: 2
+    },
+}
+
 exports.single = {
                 PARENT: [exports.genericTank],
                 LABEL: 'Single',
@@ -5399,7 +5424,7 @@ exports.spectator = {
         DAMAGE: 0,
     }
 };
-exports.btSpectator = {...exports.spectator}
+exports.trustedSpectator = {...exports.spectator}
 exports.enemyObliteration = {
     ...exports.spectator,
     PARENT: [exports.genericTank],
@@ -7902,7 +7927,9 @@ exports.bossesMenu = {
     PARENT: [exports.menu],
     LABEL: 'Bosses'
 }
-exports.btBossesMenu = { ...exports.bossesMenu }
+exports.trustedBossesMenu = { ...exports.bossesMenu }
+exports.freeBossesMenu = { ...exports.bossesMenu }
+
 exports.eliteBosses = {
     PARENT: [exports.menu],
     LABEL: 'Elite Bosses'
@@ -7985,21 +8012,23 @@ exports.funTanks = {
     PARENT: [exports.menu],
     LABEL: 'Fun Tanks'
 }
-exports.btFunTanks = {
-    PARENT: [exports.menu],
-    LABEL: 'Fun Tanks'
-}
+exports.trustedFunTanks = {...exports.funTanks};
+exports.freeFunTanks = {...exports.funTanks};
+
 exports.tanks = {
     PARENT: [exports.menu],
     LABEL: 'Tanks'
 }
-exports.betatesterTanks = {
-    PARENT: [exports.menu],
-    LABEL: 'Tanks'
-}
+exports.trustedTanks = {...exports.tanks}
+exports.freeTanks = {...exports.tanks}
+
 exports.arrasMenu = {
     PARENT: [exports.menu],
     LABEL: 'Arras Menu'
+}
+exports.permsMenu = {
+    PARENT: [exports.menu],
+    LABEL: 'Permissions Menu'
 }
 // generator upgrades
 // should've made some function to make upgrades easily but too hard
@@ -8107,11 +8136,7 @@ exports.bossesMenu.UPGRADES_TIER_0 = [
     exports.rogueBosses,
     exports.celestialBosses,
 ]
-exports.btBossesMenu.UPGRADES_TIER_0 = [
-    exports.sentries,
-    exports.eliteBosses,
-    exports.rogueBosses,
-]
+
 exports.eliteBosses.UPGRADES_TIER_0 = [
     exports.elite_destroyer,
     exports.elite_gunner,
@@ -8175,13 +8200,7 @@ exports.funTanks.UPGRADES_TIER_0 = [
     exports.shredder,
     exports.shower
 ]
-exports.btFunTanks.UPGRADES_TIER_0 = [
-    exports.master,
-    exports.demolisher,
-    exports.painterM,
-    exports.septa,
-    exports.shower
-]
+
 exports.painterM.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports.painterXXS, exports.painterL, exports.painterXL, exports.painterXXL, exports.painterM]
 exports.painterS.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports.painterXXS, exports.painterL, exports.painterXL, exports.painterXXL, exports.painterM]
 exports.painterXS.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports.painterXXS, exports.painterL, exports.painterXL, exports.painterXXL, exports.painterM]
@@ -8202,12 +8221,14 @@ exports.tanks.UPGRADES_TIER_0 = [
     exports.betatanks,
     exports.arrasMenu
 ]
-exports.developer.UPGRADES_TIER_0 = [
-    exports.eggGenerator,
-    exports.tanks,
-    // exports.tools,
-    exports.betatester
-];
+exports.permsMenu.UPGRADES_TIER_0 = [
+    exports.developer,
+    exports.betatester,
+    exports.trustedPlayer,
+    exports.freeMenu,
+    exports.basic,
+]
+
 exports.spectator.UPGRADES_TIER_0 = [
     exports.developer,
     exports.enemyObliteration,
@@ -8216,15 +8237,56 @@ exports.spectator.UPGRADES_TIER_0 = [
 exports.enemyObliteration.UPGRADES_TIER_0 = [
     exports.spectator
 ]
-exports.betatesterTanks.UPGRADES_TIER_0 = [
+exports.developer.UPGRADES_TIER_0 = [
+    exports.eggGenerator,
+    exports.tanks,
+    // exports.tools,
+    exports.permsMenu
+];
+exports.betatester.UPGRADES_TIER_0 = [
     exports.basic,
-    exports.btBossesMenu,
+    exports.trustedSpectator,
     exports.betatanks,
     exports.testTanks,
-    exports.btFunTanks,
+]
+exports.trustedFunTanks.UPGRADES_TIER_0 = [
+    exports.master,
+    exports.demolisher,
+    exports.painterM,
+    exports.septa,
+    exports.shower
+]
+exports.trustedTanks.UPGRADES_TIER_0 = [
+    exports.basic,
+    exports.trustedBossesMenu,
+    exports.trustedFunTanks,
+    exports.testTanks,
     exports.arrasMenu
 ]
-exports.betatester.UPGRADES_TIER_0 = [
-    exports.btSpectator,
-    exports.betatesterTanks,
+exports.trustedBossesMenu.UPGRADES_TIER_0 = [
+    exports.sentries,
+    exports.eliteBosses,
+    exports.rogueBosses,
+]
+exports.trustedPlayer.UPGRADES_TIER_0 = [
+    exports.trustedSpectator,
+    exports.trustedTanks,
+    exports.freeMenu,
+]
+exports.freeFunTanks.UPGRADES_TIER_0 = [
+    exports.master,
+    exports.septa,
+    exports.shower
+]
+exports.freeBossesMenu.UPGRADES_TIER_0 = [
+    exports.sentries
+]
+exports.freeTanks.UPGRADES_TIER_0 = [
+    exports.freeFunTanks,
+    exports.freeBossesMenu,
+    exports.testTanks
+]
+exports.freeMenu.UPGRADES_TIER_0 = [
+    exports.basic,
+    exports.freeTanks,
 ]
