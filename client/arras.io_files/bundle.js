@@ -2563,7 +2563,10 @@
       break;
     }
   })(`
-# Beginning of independent Arras756 (July 7 2026)
+# Fixed duplicate selectors bug (July 16 2026)
+- Server selectors now work and are no longer duplicate.
+
+# Beginning of independent Arras756 (July 15 2026)
 - The game is independent from arras.cx now.
 - The reason the UI doesn't seem the same as arras.cx is because I got the files by pressing Ctrl + S in the arras.cx website, which can be inaccurate. (there were no official client files provided)
 - Right now you can see that there are duplicate server selectors, which will be fixed soon.

@@ -31,6 +31,7 @@ Array.prototype.remove = index => {
 
 // Set up room.
 global.bannedIps = JSON.parse(process.env.BANNED_IPS || '[]');
+global.foodClearing = {toClear: false, timePassed: 0}
 global.fps = "Unknown";
 var roomSpeed = c.gameSpeed;
 
@@ -48,7 +49,6 @@ const setup = map.setup;
 const ygrid = setup.length;
 const xgrid = setup[0].length;
 let teams = map.teams; 
-if (!Array.isArray(map.disabledBases)) map.disabledBases = [];
 if ((typeof map.height !== 'number' || typeof map.width !== 'number') && map.height <= 0 || map.width <= 0 || !Number.isFinite(map.width) || !Number.isFinite(map.height)) 
     {map.height = 1500; map.width = 1500; util.warn('Invalid map width or height. Reverting to default.')};
 
@@ -73,7 +73,6 @@ const room = {
         poisoned: false,
         timePassed: 0,
         type: cell,
-        base: true, // only for base tiles
     }))),
     scale: {
         square: map.width * map.height / 100000000,
@@ -85,9 +84,6 @@ const room = {
     },    
     topPlayerID: -1,
 };
-for (let i = 0; i < map.disabledBases.length; i++) {
-    room.tiles[map.disabledBases[i].y][map.disabledBases[i].x].base = false;
-}
     room.findType = type => {
         let output = [];
         let j = 0;
@@ -109,6 +105,10 @@ for (let i = 0; i < map.disabledBases.length; i++) {
     room.findType('bas2');
     room.findType('bas3');
     room.findType('bas4');
+    room.findType('bap1');
+    room.findType('bap2');
+    room.findType('bap3');
+    room.findType('bap4');
     room.findType('roid');
     room.findType('rock');
     room.findType('grav');
@@ -2044,6 +2044,9 @@ class Entity {
                 this.foodLevel = set.FOOD.LEVEL; 
                 this.foodCountup = 0;
             }
+            if (set.IS_FOOD != null) {
+                this.isFood = set.IS_FOOD;
+            }
         }
         if (set.IGNORE_WALLS != null) {
             this.ignoreWalls = set.IGNORE_WALLS;
@@ -2108,7 +2111,6 @@ class Entity {
                     ((Array.isArray(def.TYPE)) ? def.TYPE : [def.TYPE]).forEach(type => o.define(type));
                     o.bindToMaster(def.POSITION, this);
                     o.spectator = true; // bots won't target turrets
-                    o.food = true;
             });
         }
         if (set.mockup != null) {
@@ -2279,6 +2281,7 @@ class Entity {
                 y: 0,
             },
             a = this.acceleration / roomSpeed;
+
         switch (this.motionType) {
         case 'glide':
             this.maxSpeed = this.topSpeed;
@@ -2466,10 +2469,10 @@ class Entity {
             let loc = { x: this.x, y: this.y, };
             if (
                 (
-                    (this.team !== -1 && room.isIn('bas1', loc)) ||
-                    (this.team !== -2 && room.isIn('bas2', loc)) ||
-                    (this.team !== -3 && room.isIn('bas3', loc)) ||
-                    (this.team !== -4 && room.isIn('bas4', loc))
+                    (this.team !== -1 && (room.isIn('bas1', loc) || room.isIn('bap1', loc))) ||
+                    (this.team !== -2 && (room.isIn('bas2', loc) || room.isIn('bap2', loc))) ||
+                    (this.team !== -3 && (room.isIn('bas3', loc) || room.isIn('bap3', loc))) ||
+                    (this.team !== -4 && (room.isIn('bas4', loc) || room.isIn('bap4', loc)))
                 ) &&
                 !this.settings.godmode &&
                 !this.spectator
@@ -3610,7 +3613,7 @@ const sockets = (() => {
                             });
                             let possiblities = [];
                             for (let i=0, m=0; i<teams; i++) {
-                                let v = Math.round(1000000 * (room['bas'+(i+1)].length + 1) / (census[i] + 1) / scoreCensus[i]);
+                                let v = Math.round(1000000 * (room['bap'+(i+1)].length + 1) / (census[i] + 1) / scoreCensus[i]);
                                 if (v > m) {
                                     m = v; possiblities = [i];
                                 }
@@ -3619,7 +3622,7 @@ const sockets = (() => {
                             // Choose from one of the least ones
                             if (player.team == null) { player.team = ran.choose(possiblities) + 1; }
                             // Make sure you're in a base
-                            if (room['bas' + player.team].length) do { loc = room.randomType('bas' + player.team); } while (dirtyCheck(loc, 50));
+                            if (room['bap' + player.team].length) do { loc = room.randomType('bap' + player.team); } while (dirtyCheck(loc, 50));
                             else do { loc = room.gaussInverse(5); } while (dirtyCheck(loc, 50));
                         } break;
                         default: do { loc = room.gaussInverse(5); } while (dirtyCheck(loc, 50));
@@ -4875,7 +4878,12 @@ var maintainloop = (() => {
                 chosenOne.type === 'bas1' || 
                 chosenOne.type === 'bas2' || 
                 chosenOne.type === 'bas3' || 
-                chosenOne.type === 'bas4'
+                chosenOne.type === 'bas4' ||
+
+                chosenOne.type === 'bap1' ||
+                chosenOne.type === 'bap2' ||
+                chosenOne.type === 'bap3' ||
+                chosenOne.type === 'bap4'
             )
         ) {
             chosenOne = room.tiles[Math.floor(Math.random() * room.ygrid)][Math.floor(Math.random() * room.xgrid)];
@@ -5011,11 +5019,7 @@ var maintainloop = (() => {
                     o.onDeath = () => f(loc, team);
             };
             for (let i=1; i<=teams; i++) {
-                room['bas' + i].forEach((loc) => { 
-                    let x = Math.floor(loc.x * room.ygrid / room.height);
-                    let y = Math.floor(loc.y * room.xgrid / room.width);
-                    if (room.tiles[y][x].base) f(loc, i); 
-                }); 
+                room['bap' + i].forEach((loc) => { f(loc, i); }); 
             }}
         // Return the spawning function
         global.bots = [];
@@ -5169,6 +5173,7 @@ var maintainloop = (() => {
                     let new_o = new Entity(place);
                         new_o.define(getFoodClass(levelToMake));
                         new_o.team = -100;
+                        new_o.isFood = true;
                     new_o.facing = o.facing + ran.randomRange(Math.PI/2, Math.PI);
                     food.push(new_o);
                     return new_o;
@@ -5179,6 +5184,7 @@ var maintainloop = (() => {
                         o = new Entity(position);
                             o.define(getFoodClass(level));
                             o.team = -100;
+                            o.isFood = true;
                         o.facing = ran.randomAngle();
                         food.push(o);
                         return o;
@@ -5186,6 +5192,7 @@ var maintainloop = (() => {
                 }
             }
         };
+
         // Define foodspawners
         class FoodSpawner {
             constructor() {
@@ -5397,7 +5404,6 @@ var speedcheckloop = (() => {
         }
     };
 })();
-
 /** BUILD THE SERVERS **/  
 // Turn the server on
 let server = http.createServer((req, res) => {

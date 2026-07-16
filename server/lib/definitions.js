@@ -403,11 +403,11 @@ exports.hugePentagon = {
     PARENT: [exports.food],
     FOOD: {
         LEVEL: 5,
+        IS_FOOD: true,
     },
     LABEL: 'Alpha Pentagon',
     VALUE: 15000,
     SHAPE: 5,
-
     SIZE: 58,
     COLOR: 14,
     BODY: {
@@ -425,6 +425,7 @@ exports.bigPentagon = {
     PARENT: [exports.food],
     FOOD: {
         LEVEL: 4,
+        IS_FOOD: true,
     },
     LABEL: 'Beta Pentagon',
     VALUE: 2500,
@@ -446,6 +447,7 @@ exports.pentagon = {
     PARENT: [exports.food],
     FOOD: {
         LEVEL: 3,
+        IS_FOOD: true,
     },
     LABEL: 'Pentagon',
     VALUE: 400,
@@ -465,6 +467,7 @@ exports.triangle = {
     PARENT: [exports.food],
     FOOD: {
         LEVEL: 2,
+        IS_FOOD: true,
     },
     LABEL: 'Triangle',
     VALUE: 120,
@@ -484,6 +487,7 @@ exports.square = {
     PARENT: [exports.food],
     FOOD: {
         LEVEL: 1,
+        IS_FOOD: true,
     },
     LABEL: 'Square',
     VALUE: 30,
@@ -503,6 +507,7 @@ exports.egg = {
     PARENT: [exports.food],
     FOOD: {
         LEVEL: 0,
+        IS_FOOD: true,
     },
     LABEL: 'Egg',
     VALUE: 10,
@@ -526,6 +531,9 @@ exports.greenpentagon = {
     SHAPE: 5,
     SIZE: 16,
     COLOR: 1,
+    FOOD: {
+        IS_FOOD: true,
+    },
     BODY: {
         DAMAGE: 3,
         DENSITY: 8,
@@ -542,6 +550,9 @@ exports.greentriangle = {
     SHAPE: 3,
     SIZE: 9,
     COLOR: 1,
+    FOOD: {
+        IS_FOOD: true,
+    },
     BODY: {
         DAMAGE: 1,
         DENSITY: 6,
@@ -558,6 +569,9 @@ exports.greensquare = {
     SHAPE: 4,
     SIZE: 10,
     COLOR: 1,
+    FOOD: {
+        IS_FOOD: true,
+    },
     BODY: {
         DAMAGE: 0.5,
         DENSITY: 4,
@@ -575,6 +589,9 @@ exports.gem = {
     SHAPE: 6,
     SIZE: 5,
     COLOR: 0,
+    FOOD: {
+        IS_FOOD: true,
+    },
     BODY: {
         DAMAGE: basePolygonDamage/4,
         DENSITY: 4,
