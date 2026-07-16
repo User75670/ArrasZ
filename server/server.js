@@ -1775,6 +1775,7 @@ class Entity {
         this.isFood = false;
         this.spectator = false;
         this.ignoreWalls = false;
+        this.angle = 0;
         // This is for collisions
         this.updateAABB = () => {};
         this.getAABB = (() => {
@@ -2052,6 +2053,9 @@ class Entity {
         }
         if (set.LAYER != null) {
             this.layer = set.LAYER;
+        }
+        if (set.SKILL_POINTS !== undefined) {
+            this.skill.points = set.SKILL_POINTS;
         }
         if (set.BODY != null) {
             if (set.BODY.ACCELERATION != null) { 

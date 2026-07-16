@@ -1014,6 +1014,7 @@ const base = {
     REGEN: 0.025,
     FOV: 1,
     DENSITY: 0.5,
+    SIZE: 12,
 };
 exports.genericTank = {
     LABEL: 'Unknown Class',
@@ -7802,6 +7803,101 @@ exports.tracker3 = {
     },
   ],
 };
+class Dreadnought {
+    constructor(label, tier, guns = [], turrets = []) {
+        let gunSettings = {angleMod: 0, toMake: 0}
+        this.SKILL_CAP = Array(10).fill(12);
+        this.LABEL = label;
+        this.GUNS = [];
+        this.TURRETS = turrets;
+        this.SKILL_POINTS = 60;
+        this.HAS_NO_RECOIL = true;
+        this.LEVEL = 45;
+        switch (tier) {
+            case "egg":
+                gunSettings = {angleMod: 360 / 2, toMake: 2}
+                this.SHAPE = 0;
+                this.SIZE = base.SIZE * 1.4;
+                this.COLOR = 6;
+                this.BODY = {
+                    HEALTH: base.HEALTH * 1.5
+                }
+                break;
+            case "square":
+                gunSettings = {angleMod: 360 / 4, toMake: 4}
+                this.SHAPE = 4;
+                this.SIZE = base.SIZE * 2;
+                this.COLOR = 13;
+                this.BODY = {
+                    HEALTH: base.HEALTH * 2.5
+                }
+                break;
+            case "triangle":
+                gunSettings = {angleMod: 360 / 3, toMake: 3}
+                this.SHAPE = 3;
+                this.SIZE = base.SIZE * 3;
+                this.COLOR = 2;
+                this.BODY = {
+                    HEALTH: base.HEALTH * 4
+                }
+                break;
+            case "pentagon":
+                gunSettings = {angleMod: 360 / 5, toMake: 5}
+                this.SHAPE = 5;
+                this.SIZE = base.SIZE * 3;
+                this.COLOR = 14;
+                this.BODY = {
+                    HEALTH: base.HEALTH * 6
+                }
+                break;
+            case "hexagon":
+                gunSettings = {angleMod: 360 / 6, toMake: 6}
+                this.SHAPE = 6;
+                this.SIZE = base.SIZE * 3;
+                this.COLOR = 0;
+                this.BODY = {
+                    HEALTH: base.HEALTH * 7
+                }
+                break;
+        }
+        for (let i = 0; i < guns.length; i++) {
+            this.GUNS.push(...repeatGuns(gunSettings.toMake, guns[i], {angleMod: gunSettings.angleMod}))
+        }
+    }
+    static combine(label, dreadnought, turrets) {
+        let result = Object.create(dreadnought);
+        Object.assign(result, {LABEL: label, TURRETS: [...dreadnought.TURRETS, ...turrets] });
+        result.UPGRADES_TIER_0 = [];
+        return result;
+    }
+}
+exports.eggProp = {
+    PARENT: [exports.genericTank],
+    COLOR: 6
+}
+exports.dreadnought = new Dreadnought('Dreadnought', 'egg');
+exports.pacifier = new Dreadnought('Pacifier', 'egg', [
+        { /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [  15,     8,      1,      0,      0,      0,      0,   ], 
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.morereload]),
+                TYPE: exports.bullet,
+            }, 
+        },
+    ]
+);
+
+exports.pacifierByte = Dreadnought.combine('Pacifier-Byte', exports.pacifier, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.autoTurret, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+
 exports.bossesMenu = {
     PARENT: [exports.menu],
     LABEL: 'Bosses'
@@ -7984,6 +8080,9 @@ exports.shinyPentagonGenerator.UPGRADES_TIER_0 = [
     exports.pentagonGenerator
 ];
 
+// dreadnoughts
+exports.dreadnought.UPGRADES_TIER_0 = [exports.pacifier];
+exports.pacifier.UPGRADES_TIER_0 = [exports.pacifierByte];
 
 exports.tools.UPGRADES_TIER_0 = [
     exports.skillTools,
@@ -8091,7 +8190,8 @@ exports.painterL.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports
 exports.painterXL.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports.painterXXS, exports.painterL, exports.painterXL, exports.painterXXL, exports.painterM]
 exports.painterXXL.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports.painterXXS, exports.painterL, exports.painterXL, exports.painterXXL, exports.painterM]
 
-exports.arrasMenu.UPGRADES_TIER_0 = [exports.tracker3, exports.tetraGunner, exports.worstTank];
+exports.arrasMenu.UPGRADES_TIER_0 = [exports.tracker3, exports.tetraGunner, exports.worstTank, exports.dreadnought];
+
 exports.tanks.UPGRADES_TIER_0 = [
     exports.basic,
     exports.bossesMenu,
