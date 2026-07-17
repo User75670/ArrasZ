@@ -527,7 +527,7 @@ exports.egg = {
 
 exports.greenpentagon = {
     PARENT: [exports.food],
-    LABEL: 'Pentagon',
+    LABEL: 'Shiny Pentagon',
     VALUE: 30000,
     SHAPE: 5,
     SIZE: 16,
@@ -546,7 +546,7 @@ exports.greenpentagon = {
 };
 exports.greentriangle = {
     PARENT: [exports.food],
-    LABEL: 'Triangle',
+    LABEL: 'Shiny Triangle',
     VALUE: 7000,
     SHAPE: 3,
     SIZE: 9,
@@ -565,7 +565,7 @@ exports.greentriangle = {
 };
 exports.greensquare = {
     PARENT: [exports.food],
-    LABEL: 'Square',
+    LABEL: 'Shiny Square',
     VALUE: 2000,
     SHAPE: 4,
     SIZE: 10,
@@ -5699,7 +5699,7 @@ exports.acBullet = {
     LAYER: 13,
     IGNORE_WALLS: true
 }
-exports.arenaCloser = {
+exports.closerBase = {
     PARENT: [exports.genericTank],
     LABEL: "Arena Closer",
     DANGER: 10,
@@ -5718,6 +5718,9 @@ exports.arenaCloser = {
     HITS_OWN_TYPE: "never",
     IGNORE_WALLS: true,
     LAYER: 13,
+}
+exports.arenaCloser = {
+    PARENT: [exports.closerBase],
     GUNS: [{
         POSITION: [14, 10, 1, 0, 0, 0, 0],
         PROPERTIES: {
@@ -5725,6 +5728,15 @@ exports.arenaCloser = {
             TYPE: [exports.acBullet]
         }
     }]
+};
+exports.smasherCloser = {
+    PARENT: [exports.closerBase],
+    LABEL: "Smasher Closer",
+    BODY: {SPEED: base.SPEED * 3},
+    TURRETS: [{ /** SIZE     X       Y     ANGLE    ARC */
+        POSITION: [  21.5,   0,      0,      0,     360,  0,], 
+        TYPE: exports.smasherBody,
+    }],
 };
 exports.demolisher = {
                 PARENT: [exports.genericTank],
@@ -8164,14 +8176,6 @@ exports.betatanks = {
     PARENT: [exports.menu],
     LABEL: 'Beta Tanks'
 }
-exports.gameTanks = {
-    PARENT: [exports.menu],
-    LABEL: 'Game Tanks'
-}
-exports.gameTanksPage2 = {
-    PARENT: [exports.menu],
-    LABEL: 'Game Tanks Page 2'
-}
 exports.testTanks = {
     PARENT: [exports.menu],
     LABEL: 'Test Tanks'
@@ -8221,6 +8225,28 @@ exports.miscTools = {
 exports.misc = {
     PARENT: [exports.menu],
     LABEL: 'Misc'
+}
+exports.trustedMisc = {...exports.misc}
+exports.freeMisc = {...exports.misc}
+exports.bases = {
+    PARENT: [exports.menu],
+    LABEL: 'Bases',
+    TURRETS: [{
+        POSITION: [base.SIZE * 1.6, 0, 0, 0, 0, 0],
+        TYPE: [exports.dominationBody]
+    }]
+}
+exports.obstacles = {
+    PARENT: [exports.menu],
+    LABEL: 'Obstacles',
+}
+exports.arenaClosers = {
+    PARENT: [exports.menu],
+    LABEL: 'Arena Closers',
+}
+exports.food = {
+    PARENT: [exports.menu],
+    LABEL: 'Food',
 }
 exports.funTanks = {
     PARENT: [exports.menu],
@@ -8364,27 +8390,6 @@ exports.sentries.UPGRADES_TIER_0 = [
     exports.sentryTrap
 ]
 exports.betatanks.UPGRADES_TIER_0 = []
-exports.gameTanks.UPGRADES_TIER_0 = [
-    exports.dominationBody,
-    exports.obstacle,
-    exports.babyObstacle,
-    exports.wall,
-    exports.food,
-    exports.baseSwarmTurret,
-    exports.baseSkimTurret,
-    exports.baseGunTurret,
-    exports.crasher,
-    exports.bullet,
-    exports.autoTurret,
-    exports.gameTanksPage2
-]
-exports.gameTanksPage2.UPGRADES_TIER_0 = [
-    exports.gameTanks,
-    exports.genericEntity,
-    exports.genericTank,
-    exports.bot,
-    exports.ramBot
-]
 exports.testTanks.UPGRADES_TIER_0 = [
     exports.repeatGunsTest,
     exports.repeatGunsTest2,
@@ -8392,10 +8397,36 @@ exports.testTanks.UPGRADES_TIER_0 = [
     exports.repeatTurretsTest2,
 ]
 exports.misc.UPGRADES_TIER_0 = [
+    exports.bases,
+    exports.arenaClosers,
+    exports.obstacles,
+    exports.food
+]
+exports.bases.UPGRADES_TIER_0 = [
     exports.baseProtector,
     exports.baseProtector2,
-    exports.baseProtector3,
-    exports.arenaCloser
+    exports.baseProtector3
+]
+exports.obstacles.UPGRADES_TIER_0 = [
+    exports.obstacle,
+    exports.babyObstacle,
+]
+exports.arenaClosers.UPGRADES_TIER_0 = [
+    exports.arenaCloser,
+    exports.smasherCloser
+]
+exports.food.UPGRADES_TIER_0 = [
+    exports.crasher,
+    exports.egg,
+    exports.square,
+    exports.triangle,
+    exports.pentagon,
+    exports.bigPentagon,
+    exports.hugePentagon,
+    exports.gem,
+    exports.greensquare,
+    exports.greentriangle,
+    exports.greenpentagon
 ]
 exports.funTanks.UPGRADES_TIER_0 = [
     exports.master,
@@ -8426,7 +8457,6 @@ exports.tanks.UPGRADES_TIER_0 = [
     exports.bossesMenu,
     exports.misc,
     exports.funTanks,
-    exports.gameTanks,
     exports.testTanks,
     exports.betatanks,
     exports.arrasMenu
@@ -8461,6 +8491,7 @@ exports.betatester.UPGRADES_TIER_0 = [
 ]
 exports.trustedFunTanks.UPGRADES_TIER_0 = [
     exports.master,
+    exports.minionspam,
     exports.demolisher,
     exports.painterM,
     exports.septa,
@@ -8469,6 +8500,7 @@ exports.trustedFunTanks.UPGRADES_TIER_0 = [
 exports.trustedTanks.UPGRADES_TIER_0 = [
     exports.basic,
     exports.trustedBossesMenu,
+    exports.trustedMisc,
     exports.trustedFunTanks,
     exports.testTanks,
     exports.arrasMenu
@@ -8477,6 +8509,11 @@ exports.trustedBossesMenu.UPGRADES_TIER_0 = [
     exports.sentries,
     exports.eliteBosses,
     exports.rogueBosses,
+    exports.celestialBosses
+]
+exports.trustedMisc.UPGRADES_TIER_0 = [
+    exports.obstacles,
+    exports.food,
 ]
 exports.trustedPlayer.UPGRADES_TIER_0 = [
     exports.trustedSpectator,
@@ -8485,15 +8522,22 @@ exports.trustedPlayer.UPGRADES_TIER_0 = [
 ]
 exports.freeFunTanks.UPGRADES_TIER_0 = [
     exports.master,
+    exports.painterM,
     exports.septa,
     exports.shower
 ]
 exports.freeBossesMenu.UPGRADES_TIER_0 = [
-    exports.sentries
+    exports.sentries,
+    exports.eliteBosses,
+    exports.rogueBosses,
+]
+exports.freeMisc.UPGRADES_TIER_0 = [
+    exports.food,
 ]
 exports.freeTanks.UPGRADES_TIER_0 = [
-    exports.freeFunTanks,
     exports.freeBossesMenu,
+    exports.freeMisc,
+    exports.freeFunTanks,
     exports.testTanks
 ]
 exports.freeMenu.UPGRADES_TIER_0 = [
