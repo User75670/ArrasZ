@@ -91,6 +91,7 @@ const g = { // Gun info here
             five:       [1.15,  1,     1,      1,      1,      1,      1,      1.05,   1.05,   1.1,    2,      1,      1],   
             autosnipe:  [1,     1,     1,      1.4,    2,      1,      1,      1,      1,      1,      1,      1,      1],   
     /***************** RELOAD RECOIL SHUDDER  SIZE   HEALTH  DAMAGE   PEN    SPEED    MAX    RANGE  DENSITY  SPRAY   RESIST  */ 
+    peace:              [1.5,   1.3,   1,      1,      1,      1.5,    1,      0.85,   0.8,    1,      1.5,    1,      1.15], 
     pound:              [2,     1.6,   1,      1,      1,      2,      1,      0.85,   0.8,    1,      1.5,    1,      1.15], 
         destroy:        [2.2,   1.8,   0.5,    1,      2,      2,      1.2,    0.65,   0.5,    1,      2,      1,      3],
             anni:       [0.85,  1.25,  1,      1,      1,      1,      1,      1,      1,      1,      1,      1,      1],    
@@ -7785,7 +7786,7 @@ exports.worstTank = {
     },
   ],
 };
-exports.tracker3gun = {
+exports.trackergun = {
   PARENT: [exports.genericTank],
   LABEL: "",
   COLOR: 34,
@@ -7816,20 +7817,25 @@ exports.tracker3 = {
     {
       /*  SIZE     X       Y     ANGLE    ARC */
       POSITION: [11, 8, 0, 0, 190, 0],
-      TYPE: [exports.tracker3gun, { INDEPENDENT: true }],
+      TYPE: [exports.trackergun, { INDEPENDENT: true }],
     },
     {
       POSITION: [11, 8, 0, 120, 190, 0],
-      TYPE: [exports.tracker3gun, { INDEPENDENT: true }],
+      TYPE: [exports.trackergun, { INDEPENDENT: true }],
     },
     {
       POSITION: [11, 8, 0, 240, 190, 0],
-      TYPE: [exports.tracker3gun, { INDEPENDENT: true }],
+      TYPE: [exports.trackergun, { INDEPENDENT: true }],
     },
   ],
 };
+
+
+
+
+// dreadnoughts
 class Dreadnought {
-    constructor(label, tier, guns = [], turrets = []) {
+    constructor(label, tier, guns = [], turrets = [], overrides = {}) {
         let gunSettings = {angleMod: 0, toMake: 0}
         this.SKILL_CAP = Array(10).fill(12);
         this.LABEL = label;
@@ -7838,61 +7844,73 @@ class Dreadnought {
         this.SKILL_POINTS = 60;
         this.HAS_NO_RECOIL = true;
         this.LEVEL = 45;
-        switch (tier) {
+        this.tier = tier;
+        switch (this.tier) {
             case "egg":
                 gunSettings = {angleMod: 360 / 2, toMake: 2}
                 this.SHAPE = 0;
-                this.SIZE = base.SIZE * 1.4;
+                this.SIZE = base.SIZE * 1.2;
                 this.COLOR = 6;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 1.5
+                    HEALTH: base.HEALTH * 2,
+                    SPEED: base.SPEED * 0.9,
                 }
                 break;
             case "square":
                 gunSettings = {angleMod: 360 / 4, toMake: 4}
                 this.SHAPE = 4;
-                this.SIZE = base.SIZE * 2;
+                this.SIZE = base.SIZE * 1.8;
                 this.COLOR = 13;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 2.5
+                    HEALTH: base.HEALTH * 4,
+                    SPEED: base.SPEED * 0.8,
                 }
                 break;
             case "triangle":
                 gunSettings = {angleMod: 360 / 3, toMake: 3}
                 this.SHAPE = 3;
-                this.SIZE = base.SIZE * 3;
+                this.SIZE = base.SIZE * 2;
                 this.COLOR = 2;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 4
+                    HEALTH: base.HEALTH * 6,
+                    SPEED: base.SPEED * 0.7,
                 }
                 break;
             case "pentagon":
                 gunSettings = {angleMod: 360 / 5, toMake: 5}
                 this.SHAPE = 5;
-                this.SIZE = base.SIZE * 3;
+                this.SIZE = base.SIZE * 2.5;
                 this.COLOR = 14;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 6
+                    HEALTH: base.HEALTH * 8,
+                    SPEED: base.SPEED * 0.6,
                 }
                 break;
             case "hexagon":
                 gunSettings = {angleMod: 360 / 6, toMake: 6}
                 this.SHAPE = 6;
-                this.SIZE = base.SIZE * 3;
+                this.SIZE = base.SIZE * 2.5;
                 this.COLOR = 0;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 7
+                    HEALTH: base.HEALTH * 10,
+                    SPEED: base.SPEED * 0.5,
                 }
                 break;
+        }
+        for (let k in overrides) {
+            this[k] = overrides[k];
         }
         for (let i = 0; i < guns.length; i++) {
             this.GUNS.push(...repeatGuns(gunSettings.toMake, guns[i], {angleMod: gunSettings.angleMod}))
         }
     }
-    static combine(label, dreadnought, turrets) {
+    static combine(label, dreadnought, turrets, overrides = {}) {
         let result = Object.create(dreadnought);
-        Object.assign(result, {LABEL: label, TURRETS: [...dreadnought.TURRETS, ...turrets] });
+        Object.assign(result, {LABEL: label, ...overrides, TURRETS: [...dreadnought.TURRETS, ...turrets] });
         result.UPGRADES_TIER_0 = [];
+        result.UPGRADES_TIER_1 = [];
+        result.UPGRADES_TIER_2 = [];
+        result.UPGRADES_TIER_3 = [];
         return result;
     }
 }
@@ -7900,10 +7918,14 @@ exports.eggProp = {
     PARENT: [exports.genericTank],
     COLOR: 6
 }
+exports.eggJuggernautProp = {
+    PARENT: [exports.genericTank],
+    COLOR: 9,
+}
 exports.dreadnought = new Dreadnought('Dreadnought', 'egg');
 exports.pacifier = new Dreadnought('Pacifier', 'egg', [
-        { /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
-            POSITION: [  15,     8,      1,      0,      0,      0,      0,   ], 
+        {        /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [  15,     7,      1,      0,      0,      0,      0,   ], 
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.morereload]),
                 TYPE: exports.bullet,
@@ -7911,7 +7933,16 @@ exports.pacifier = new Dreadnought('Pacifier', 'egg', [
         },
     ]
 );
-
+exports.pacifierTracker = Dreadnought.combine('Pacifier-Tracker', exports.pacifier, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.trackergun, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
 exports.pacifierByte = Dreadnought.combine('Pacifier-Byte', exports.pacifier, [
     {
         POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
@@ -7922,6 +7953,189 @@ exports.pacifierByte = Dreadnought.combine('Pacifier-Byte', exports.pacifier, [
         TYPE: [exports.autoTurret, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
     },
 ])
+exports.pacifierJuggernaut = Dreadnought.combine('Pacifier-Juggernaut', exports.pacifier, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [base.SIZE * 2, 0, 0, 0, 0, 0],
+        TYPE: [exports.eggJuggernautProp]
+    },
+    // 1.5x more health than normal egg dreadnought
+], {BODY: {HEALTH: base.HEALTH * 3}})
+
+exports.sword = new Dreadnought('Sword', 'egg', [
+    {
+     /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+        POSITION: [  21,    7.5,     1,      0,      0,      0,      0,   ], 
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
+            TYPE: exports.bullet,
+        },
+    }
+], [], {BODY: {FOV: 1.15}})
+exports.swordTracker = Dreadnought.combine('Sword-Tracker', exports.sword, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.trackergun, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.swordByte = Dreadnought.combine('Sword-Byte', exports.sword, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.autoTurret, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.swordJuggernaut = Dreadnought.combine('Sword-Juggernaut', exports.sword, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [base.SIZE * 2, 0, 0, 0, 0, 0],
+        TYPE: [exports.eggJuggernautProp]
+    },
+], {BODY: {HEALTH: base.HEALTH * 3}})
+
+exports.peacekeeper = new Dreadnought('Peacekeeper', 'egg', [
+    { /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+        POSITION: [  17,    9,      1,      0,      0,      0,      0,   ], 
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.peace]),
+            TYPE: exports.bullet,
+    }, },
+])
+exports.peacekeeperTracker = Dreadnought.combine('Peacekeeper-Tracker', exports.peacekeeper, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.trackergun, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.peacekeeperByte = Dreadnought.combine('Peacekeeper-Byte', exports.peacekeeper, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.autoTurret, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.peacekeeperJuggernaut = Dreadnought.combine('Peacekeeper-Juggernaut', exports.peacekeeper, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [base.SIZE * 2, 0, 0, 0, 0, 0],
+        TYPE: [exports.eggJuggernautProp]
+    },
+], {BODY: {HEALTH: base.HEALTH * 3}})
+
+exports.invader = new Dreadnought('Invader', 'egg', [
+    {   /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+        POSITION: [   6,     10,    1.2,     8,      0,      0,      0,   ], 
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.drone, g.over]),
+            TYPE: exports.drone,
+            AUTOFIRE: true,
+            SYNCS_SKILLS: true,
+            STAT_CALCULATOR: gunCalcNames.drone,
+        }, 
+    },
+], [], {STAT_NAMES: statnames.drone, MAX_CHILDREN: 8})
+exports.invaderTracker = Dreadnought.combine('Invader-Tracker', exports.invader, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.trackergun, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.invaderByte = Dreadnought.combine('Invader-Byte', exports.invader, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.autoTurret, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.invaderJuggernaut = Dreadnought.combine('Invader-Juggernaut', exports.invader, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [base.SIZE * 2, 0, 0, 0, 0, 0],
+        TYPE: [exports.eggJuggernautProp]
+    },
+], {BODY: {HEALTH: base.HEALTH * 3}})
+exports.centaur = new Dreadnought('Centaur', 'egg', [
+    {POSITION: [  13.25,     7,      1,      0,      0,      0,      0,   ],}, 
+    {
+        POSITION: [   3,     7,     1.7,    13.25,      0,      0,      0,   ], 
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.trap]),
+            TYPE: exports.trap, 
+            STAT_CALCULATOR: gunCalcNames.trap,
+        }, }
+])
+exports.centaurTracker = Dreadnought.combine('Centaur-Tracker', exports.centaur, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.trackergun, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.centaurByte = Dreadnought.combine('Centaur-Byte', exports.centaur, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [10, 0, 0, 180, 360, 1],
+        TYPE: [exports.autoTurret, {INDEPENDENT: true, CONTROLLERS: ["nearestDifferentMaster"]}]
+    },
+])
+exports.centaurJuggernaut = Dreadnought.combine('Centaur-Juggernaut', exports.centaur, [
+    {
+        POSITION: [base.SIZE * 1.3, 0, 0, 0, 0, 1],
+        TYPE: [exports.eggProp]
+    },
+    {
+        POSITION: [base.SIZE * 2, 0, 0, 0, 0, 0],
+        TYPE: [exports.eggJuggernautProp]
+    },
+], {BODY: {HEALTH: base.HEALTH * 3}})
+// dreadnought upgrades
+exports.dreadnought.UPGRADES_TIER_0 = [exports.sword, exports.pacifier, exports.peacekeeper, exports.invader, exports.centaur];
+exports.sword.UPGRADES_TIER_0 = [exports.swordTracker, exports.swordByte, exports.swordJuggernaut];
+exports.pacifier.UPGRADES_TIER_0 = [exports.pacifierTracker, exports.pacifierByte, exports.pacifierJuggernaut];
+exports.peacekeeper.UPGRADES_TIER_0 = [exports.peacekeeperTracker, exports.peacekeeperByte, exports.peacekeeperJuggernaut];
+exports.invader.UPGRADES_TIER_0 = [exports.invaderTracker, exports.invaderByte, exports.invaderJuggernaut];
+exports.centaur.UPGRADES_TIER_0 = [exports.centaurTracker, exports.centaurByte, exports.centaurJuggernaut];
+
+
 
 exports.bossesMenu = {
     PARENT: [exports.menu],
@@ -8108,10 +8322,6 @@ exports.shinyPentagonGenerator.UPGRADES_TIER_0 = [
     exports.basic,
     exports.pentagonGenerator
 ];
-
-// dreadnoughts
-exports.dreadnought.UPGRADES_TIER_0 = [exports.pacifier];
-exports.pacifier.UPGRADES_TIER_0 = [exports.pacifierByte];
 
 exports.tools.UPGRADES_TIER_0 = [
     exports.skillTools,
