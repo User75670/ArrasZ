@@ -7864,8 +7864,13 @@ class Dreadnought {
                 this.SIZE = base.SIZE * 1.2;
                 this.COLOR = 6;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 2,
-                    SPEED: base.SPEED * 0.9,
+                    SPEED: base.SPEED * 0.8,
+                    HEALTH: base.HEALTH * 1.75,
+	                SHIELD: base.SHIELD * 1.5,
+	                REGEN: base.REGEN * 1.5,
+                    FOV: base.FOV,
+	                RESIST: base.RESIST,
+	                DENSITY: base.DENSITY * 1.5,
                 }
                 break;
             case "square":
@@ -7874,8 +7879,13 @@ class Dreadnought {
                 this.SIZE = base.SIZE * 1.8;
                 this.COLOR = 13;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 4,
-                    SPEED: base.SPEED * 0.8,
+                    SPEED: base.SPEED * 0.675,
+                    HEALTH: base.HEALTH * 2.5,
+	                SHIELD: base.SHIELD * 2,
+	                REGEN: base.REGEN * 2,
+                    FOV: base.FOV * 0.95,
+	                RESIST: base.RESIST,
+	                DENSITY: base.DENSITY * 2,
                 }
                 break;
             case "triangle":
@@ -7884,8 +7894,13 @@ class Dreadnought {
                 this.SIZE = base.SIZE * 2;
                 this.COLOR = 2;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 6,
-                    SPEED: base.SPEED * 0.7,
+                    SPEED: base.SPEED * 0.55,
+                    HEALTH: base.HEALTH * 3.5,
+	                SHIELD: base.SHIELD * 2.5,
+	                REGEN: base.REGEN * 2.5,
+                    FOV: base.FOV * 0.95,
+	                RESIST: base.RESIST,
+	                DENSITY: base.DENSITY * 2.5,
                 }
                 break;
             case "pentagon":
@@ -7894,8 +7909,13 @@ class Dreadnought {
                 this.SIZE = base.SIZE * 2.5;
                 this.COLOR = 14;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 8,
-                    SPEED: base.SPEED * 0.6,
+                    SPEED: base.SPEED * 0.425,
+                    HEALTH: base.HEALTH * 4.25,
+	                SHIELD: base.SHIELD * 3,
+	                REGEN: base.REGEN * 3,
+                    FOV: base.FOV * 0.95,
+	                RESIST: base.RESIST,
+	                DENSITY: base.DENSITY * 3,
                 }
                 break;
             case "hexagon":
@@ -7904,8 +7924,13 @@ class Dreadnought {
                 this.SIZE = base.SIZE * 2.5;
                 this.COLOR = 0;
                 this.BODY = {
-                    HEALTH: base.HEALTH * 10,
-                    SPEED: base.SPEED * 0.5,
+                    SPEED: base.SPEED * 0.3,
+                    HEALTH: base.HEALTH * 5,
+	                SHIELD: base.SHIELD * 3.5,
+	                REGEN: base.REGEN * 3.5,
+                    FOV: base.FOV * 0.95,
+	                RESIST: base.RESIST,
+	                DENSITY: base.DENSITY * 3.5,
                 }
                 break;
         }
