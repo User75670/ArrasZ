@@ -3198,9 +3198,10 @@ const sockets = (() => {
                         case 1: given = 'autofire'; break;
                         case 2: given = 'override'; break;
                         case 3: given = 'cheat'; break;
-                        case 4: given = 'nextcheat'; break;
                         // Kick if it sent us shit.
-                        default: util.log(tog); socket.kick('Bad toggle.'); return 1;
+                        default: util.log(tog); 
+                        // socket.kick('Bad toggle.'); 
+                        return 1;
                     } 
                     // Apply a good request.
                     if (player.command != null && player.body != null) {
@@ -3244,7 +3245,7 @@ const sockets = (() => {
                                     }
                                     case 'clear': {
                                         entities.forEach(e => {
-                                            if (e.isFood) e.kill();
+                                            if (e.isFood) {e.kill();};
                                         });
                                     }
                                     case 'kill': {
@@ -3314,17 +3315,19 @@ const sockets = (() => {
                                     }
                                 }
                             }
-                        } else if (given === 'nextcheat') {
+                        }
+                        //  else if (given === 'nextcheat') {
                             
-                            if (socket.cheats.length !== 0) {
-                                if (socket.cheatInUse < socket.cheats.length - 1) {
-                                    socket.cheatInUse++;
-                                } else {
-                                    socket.cheatInUse = 0;
-                                }
-                                player.body.sendMessage('Switched to: ' + socket.cheats[socket.cheatInUse].name)};
+                        //     if (socket.cheats.length !== 0) {
+                        //         if (socket.cheatInUse < socket.cheats.length - 1) {
+                        //             socket.cheatInUse++;
+                        //         } else {
+                        //             socket.cheatInUse = 0;
+                        //         }
+                        //         player.body.sendMessage('Switched to: ' + socket.cheats[socket.cheatInUse].name)};
                             
-                        } else {
+                        // }
+                        else {
                             player.command[given] = !player.command[given];
                             player.body.sendMessage(given.charAt(0).toUpperCase() + given.slice(1) + ((player.command[given]) ? ' enabled.' : ' disabled.'));
                         }
@@ -3390,6 +3393,17 @@ const sockets = (() => {
                         if (cl != null) player.body.define(Class[cl]);
                     }
                 } break;
+                case 'nextcheat': {
+                    if (socket.cheats.length !== 0) {
+                        if (socket.cheatInUse < socket.cheats.length - 1) {
+                            socket.cheatInUse++;
+                        } else {
+                            socket.cheatInUse = 0;
+                        }
+                        player.body.sendMessage('Switched to: ' + socket.cheats[socket.cheatInUse].name)
+                    };
+                    break;
+                }
                 case 'previouscheat': { // switching to previous cheat, could have organized better but it isn't broke so I'm not fixing
                     if (socket.cheats.length !== 0) {
                         if (socket.cheatInUse > 0) {
@@ -3400,7 +3414,8 @@ const sockets = (() => {
                         player.body.sendMessage('Switched to: ' + socket.cheats[socket.cheatInUse].name)};
                     break;
                 }
-                default: socket.kick('Bad packet index.');
+                default: util.log('Bad packet index.');
+                // socket.kick('Bad packet index.');
                 }
             }
             // Monitor traffic and handle inactivity disconnects
@@ -5416,7 +5431,7 @@ var speedcheckloop = (() => {
             active = logs.entities.count();
         global.fps = (1000/sum).toFixed(2);
         if (sum > 1000 / roomSpeed / 30) { 
-            //fails++;
+            fails++;
             util.warn('~~ LOOPS: ' + loops + '. ENTITY #: ' + entities.length + '//' + Math.round(active/loops) + '. VIEW #: ' + views.length + '. BACKLOGGED :: ' + (sum * roomSpeed * 3).toFixed(3) + '%! ~~');
             util.warn('Total activation time: ' + activationtime);
             util.warn('Total collision time: ' + collidetime);
@@ -5427,9 +5442,12 @@ var speedcheckloop = (() => {
             util.warn('Total entity life+thought cycle time: ' + lifetime);
             util.warn('Total entity selfie-taking time: ' + selfietime);
             util.warn('Total time: ' + (activationtime + collidetime + movetime + playertime + maptime + physicstime + lifetime + selfietime));
-            if (fails > 60) {
+            if (fails > 40) {
                 util.error("FAILURE!");
-                //process.exit(1);
+                sockets.broadcast("Server overloaded, Restarting!");
+                setTimeout(() => {
+                    process.exit(1);
+                }, 2000)
             }
         } else {
             fails = 0;

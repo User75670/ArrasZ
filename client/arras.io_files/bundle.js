@@ -11,7 +11,8 @@
       KEY_CHOOSE_5: "J",
       KEY_CHOOSE_6: "K",
       KEY_SPECIAL: "`",
-      KEY_SMTH: "M",
+      KEY_PREVIOUS_CHEAT: "M",
+      KEY_NEXT_CHEAT: "V",
     },
     KEY_AUTO_FIRE: 69,
     KEY_AUTO_SPIN: 67,
@@ -19,7 +20,7 @@
     KEY_LEVEL_UP: 78,
     KEY_ABILITY: 70,
     KEY_PAUSE: 71,
-    KEY_REVERSE_TANK: 86,
+    // KEY_REVERSE_TANK: 86,
     KEY_REVERSE_MOUSE: 66,
     KEY_SCREENSHOT: 81,
     KEY_UPGRADE_MAX: 77,
@@ -60,7 +61,8 @@
     KEY_MOUSE_2: 16,
     KEY_SPECIAL: 192,
     KEY_SPECIAL_ALT: 223,
-    KEY_SMTH: 77,
+    KEY_PREVIOUS_CHEAT: 77,
+    KEY_NEXT_CHEAT: 86,
     KEY_SUICIDE: 79,
     i: 1920,
     j: 1080,
@@ -640,8 +642,11 @@
                     a.u.m("0");
                     a.nb = !0;
                     break;
-                  case c.KEY_SMTH:
+                  case c.KEY_PREVIOUS_CHEAT:
                     a.u.m("previouscheat");
+                    break;
+                  case c.KEY_NEXT_CHEAT:
+                    a.u.m("nextcheat");
                     break;
                   case c.KEY_SUICIDE:
                     a.u.m("K");
@@ -2569,6 +2574,12 @@
       break;
     }
   })(`
+# Dreadnoughts + other
+- Added egg dreadnoughts
+- Organized menus better
+- Removed Game Tanks menu
+- Added Smasher Closer
+
 # Fixed duplicate selectors bug (July 16 2026)
 - Server selectors now work and are no longer duplicate.
 
