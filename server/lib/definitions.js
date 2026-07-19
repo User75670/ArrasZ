@@ -7903,8 +7903,6 @@ exports.tracker3 = {
 };
 
 
-
-
 // dreadnoughts
 class Dreadnought {
     constructor(label, tier, guns = [], turrets = [], overrides = {}) {
@@ -8340,6 +8338,10 @@ exports.celestialBosses = {
     PARENT: [exports.menu],
     LABEL: 'Celestial Bosses'
 }
+exports.customBosses = {
+    PARENT: [exports.menu],
+    LABEL: 'Custom Bosses'
+}
 exports.sentries = {
     PARENT: [exports.menu],
     LABEL: 'Sentries'
@@ -8551,6 +8553,7 @@ exports.bossesMenu.UPGRADES_TIER_0 = [
     exports.eliteBosses,
     exports.rogueBosses,
     exports.celestialBosses,
+    exports.customBosses
 ]
 
 exports.eliteBosses.UPGRADES_TIER_0 = [
