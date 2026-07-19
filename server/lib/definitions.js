@@ -7961,7 +7961,7 @@ exports.eggJuggernautProp = {
 }
 exports.droneTurret = {
     PARENT: [exports.genericTank],
-    LABEL: 'Spinner',
+    LABEL: 'Guard',
     COLOR: 16,
     INDEPENDENT: true,
     FACING_TYPE: 'autospin',
