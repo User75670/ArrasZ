@@ -2582,6 +2582,7 @@
 - Added a dev-only permission which still has the same developer tank but has access to kick and temp ban commands.
 - Removed kick and temp ban from normal developer.
 - Arena closer now no longer is affected from base tiles.
+- Added omega pentagon along with omega pentagon generator.
 
 # Dreadnoughts + other (July 18 2026)
 - Added egg dreadnoughts
