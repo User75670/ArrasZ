@@ -2586,6 +2586,7 @@
 - Added Mega Trapper, Auto-Mega Trapper and Giga Trapper.
 - Added Tera Trapper to developer, trusted player menu and free tanks menu.
 - Added Factory Closer
+- Removed test tanks from beta tester.
 
 # Idk what to call this update (July 20 2026)
 - Updated juggernaut.

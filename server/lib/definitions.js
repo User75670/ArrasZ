@@ -8963,7 +8963,6 @@ exports.betatester.UPGRADES_TIER_0 = [
     exports.basic,
     exports.trustedSpectator,
     exports.betatanks,
-    exports.testTanks,
 ]
 exports.trustedFunTanks.UPGRADES_TIER_0 = [
     exports.master,
