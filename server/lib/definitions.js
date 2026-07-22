@@ -3572,6 +3572,37 @@ exports.single = {
                     }, }
             ]
         }
+        exports.megatrapper = {
+            PARENT: [exports.genericTank],
+            LABEL: 'Mega Trapper',
+            STAT_NAMES: statnames.trap,
+            GUNS: [
+                {POSITION: [  17,     13.5,      1,      0,      0,      0,      0,   ],}, 
+                {
+                    POSITION: [   3,     13.5,     1.7,    17,      0,      0,      0,   ], 
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.trap, g.pound, g.morereload]),
+                        TYPE: exports.trap, 
+                        STAT_CALCULATOR: gunCalcNames.trap,
+                    }, }
+            ]
+        }
+        exports.automegatrapper = makeAuto(exports.megatrapper)
+        exports.gigatrapper = {
+            PARENT: [exports.genericTank],
+            LABEL: 'Giga Trapper',
+            STAT_NAMES: statnames.trap,
+            GUNS: [
+                {POSITION: [  19,     20,      1,      0,      0,      0,      0,   ],}, 
+                {
+                    POSITION: [   3,     20,     1.7,    19,      0,      0,      0,   ], 
+                    PROPERTIES: {
+                        SHOOT_SETTINGS: combineStats([g.trap, g.pound, g.destroy, g.doublereload]),
+                        TYPE: exports.trap, 
+                        STAT_CALCULATOR: gunCalcNames.trap,
+                    }, }
+            ]
+        }
         exports.autotrapper = makeAuto(exports.trapper);
         exports.builder = {
             PARENT: [exports.genericTank],
@@ -4723,7 +4754,7 @@ exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machine, 
 
     exports.machine.UPGRADES_TIER_2 = [exports.destroy, exports.artillery, exports.mini, exports.gunner],
         exports.machine.UPGRADES_TIER_3 = [exports.spray],
-        exports.destroy.UPGRADES_TIER_3 = [exports.anni, exports.hybrid, exports.construct, exports.shotgun2],
+        exports.destroy.UPGRADES_TIER_3 = [exports.anni, exports.hybrid, exports.construct, exports.shotgun2, exports.gigatrapper],
         exports.artillery.UPGRADES_TIER_3 = [exports.mortar, exports.spread, exports.skimmer, exports.hiveshooter],
         exports.mini.UPGRADES_TIER_3 = [exports.stream, exports.nailgun, exports.hybridmini],
 
@@ -4740,9 +4771,10 @@ exports.basic.UPGRADES_TIER_1 = [exports.twin, exports.sniper, exports.machine, 
         exports.underseer.UPGRADES_TIER_3 = [exports.necromancer],
         exports.cruiser.UPGRADES_TIER_3 = [exports.carrier, exports.battleship, exports.fortress, exports.autocruiser, exports.commander],
     
-    exports.trapper.UPGRADES_TIER_2 = [exports.builder, exports.tritrapper, exports.flanktrap, exports.autotrapper],
+    exports.trapper.UPGRADES_TIER_2 = [exports.builder, exports.tritrapper, exports.flanktrap, exports.autotrapper, exports.megatrapper],
         exports.tritrapper.UPGRADES_TIER_3 = [exports.fortress, exports.hexatrap, exports.heptatrap, exports.tritrap],
-        exports.autotrapper.UPGRADES_TIER_3 = [exports.autobuilder, exports.autoflanktrap],
+        exports.autotrapper.UPGRADES_TIER_3 = [exports.autobuilder, exports.autoflanktrap, exports.automegatrapper],
+        exports.megatrapper.UPGRADES_TIER_3 = [exports.gigatrapper, exports.automegatrapper],
     exports.trapper.UPGRADES_TIER_3 = [exports.overtrap],
     exports.autoBasic.UPGRADES_TIER_2 = [exports.autotrapper, exports.mechaBasic],
     exports.mechaBasic.UPGRADES_TIER_3 = [exports.autoMechaBasic, exports.ultraMechaBasic]
@@ -5908,7 +5940,7 @@ exports.painterXXL = {
 }
 exports.septa = {
     PARENT: [exports.genericTank],
-    LABEL: 'Septa shot',
+    LABEL: 'Septa Shot',
     DANGER: 8,
     BODY: {
         SPEED: base.SPEED * 0.85,
@@ -8484,6 +8516,22 @@ exports.sanctuaryV4 = {
         }, {angleMod: 360 / 4})
     ]
 }
+exports.teratrapper = {
+    PARENT: [exports.genericTank],
+    LABEL: 'Tera Trapper',
+    STAT_NAMES: statnames.trap,
+    GUNS: [
+        {POSITION: [  19,     20,      1.3,      0,      0,      0,      0,   ],}, 
+        {
+            POSITION: [   3,     26.5,     1.7,    19,      0,      0,      0,   ], 
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.pound, g.destroy, g.anni, g.morereload]),
+                TYPE: exports.trap, 
+                STAT_CALCULATOR: gunCalcNames.trap,
+            }, 
+        }
+    ]
+}
 exports.bossesMenu = {
     PARENT: [exports.menu],
     LABEL: 'Bosses'
@@ -8788,7 +8836,8 @@ exports.funTanks.UPGRADES_TIER_0 = [
     exports.septa,
     exports.twindev,
     exports.shredder,
-    exports.shower
+    exports.shower,
+    exports.teratrapper
 ]
 
 exports.painterM.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports.painterXXS, exports.painterL, exports.painterXL, exports.painterXXL, exports.painterM]
@@ -8844,7 +8893,8 @@ exports.trustedFunTanks.UPGRADES_TIER_0 = [
     exports.demolisher,
     exports.painterM,
     exports.septa,
-    exports.shower
+    exports.shower,
+    exports.teratrapper
 ]
 exports.trustedTanks.UPGRADES_TIER_0 = [
     exports.basic,
@@ -8873,7 +8923,8 @@ exports.freeFunTanks.UPGRADES_TIER_0 = [
     exports.master,
     exports.painterM,
     exports.septa,
-    exports.shower
+    exports.shower,
+    exports.teratrapper
 ]
 exports.freeBossesMenu.UPGRADES_TIER_0 = [
     exports.sentries,
