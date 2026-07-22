@@ -5804,6 +5804,57 @@ exports.smasherCloser = {
         TYPE: exports.smasherBody,
     }],
 };
+
+exports.minionAc = {
+    PARENT: [exports.closerBase],
+    LABEL: 'Arena Closer Minion', 
+    TYPE: 'minion',
+    DAMAGE_CLASS: 0,
+    HITS_OWN_TYPE: 'hardWithBuffer',
+    FACING_TYPE: 'smoothToTarget',
+    BODY: {
+        ACCELERATION: 0.4,
+    },
+    AI: {
+        BLIND: true,
+    },
+    CLEAR_ON_MASTER_UPGRADE: true,
+    GIVE_KILL_MESSAGE: false,
+    CONTROLLERS: [
+        'nearestDifferentMaster', 'mapAltToFire', 'minion', 'canRepel', 'hangOutNearMaster'],
+    //CONTROLLERS: ['nearestDifferentMaster'],
+    GUNS: [ { /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+        POSITION: [14, 10, 1, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.closer]),
+            TYPE: [exports.acBullet]
+        } }, 
+    ],
+};
+exports.factoryCloser = {
+    PARENT: [exports.closerBase],
+    STAT_NAMES: statnames.drone,
+    LABEL: 'Factory Closer',
+    MAX_CHILDREN: 6,
+    GUNS: [ 
+        { /**** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [   5,     11,      1,      10.5,   0,      0,      0,   ], 
+        }, 
+        {
+            POSITION: [   2,     14,      1,      15.5,   0,      0,      0,   ], 
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.factory]),
+                TYPE: exports.minionAc,
+                STAT_CALCULATOR: gunCalcNames.drone,                        
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,   
+            }, 
+        }, 
+        {                        
+            POSITION: [   4,     14,      1,      8,      0,      0,      0,   ], 
+        }
+    ],
+};
 exports.demolisher = {
                 PARENT: [exports.genericTank],
                 BODY: {
@@ -8809,7 +8860,8 @@ exports.obstacles.UPGRADES_TIER_0 = [
 ]
 exports.arenaClosers.UPGRADES_TIER_0 = [
     exports.arenaCloser,
-    exports.smasherCloser
+    exports.smasherCloser,
+    exports.factoryCloser
 ]
 exports.food.UPGRADES_TIER_0 = [
     exports.crasher,
