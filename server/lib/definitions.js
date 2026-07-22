@@ -5327,9 +5327,9 @@ exports.ramBot = {
                 POSITION: [  4.5,   8.5,   -1.5,     7,      0,     315,     0,   ], }, 
             ],
         };
-exports.baseProtector2 = {
+exports.weirdBaseProtector = {
     PARENT: [exports.genericTank],
-    LABEL: 'Base Protector 2',
+    LABEL: 'Weird Base Protector',
     DAMAGE_CLASS: 0,
     CAN_BE_ON_LEADERBOARD: false,
     ACCEPTS_SCORE: false,
@@ -5421,9 +5421,9 @@ exports.baseProtector2 = {
             },
     ],
 }
-exports.baseProtector3 = {
+exports.baseProtector2 = {
             PARENT: [exports.genericTank],
-            LABEL: 'Base Protector 3',
+            LABEL: 'Base Protector 2',
             SIZE: 64,
             DAMAGE_CLASS: 0,
             ACCEPTS_SCORE: false,
@@ -8674,6 +8674,22 @@ exports.bases = {
         TYPE: [exports.dominationBody]
     }]
 }
+exports.baseProtectors = {
+    PARENT: [exports.menu],
+    LABEL: 'Base Protectors',
+    TURRETS: [{
+        POSITION: [base.SIZE * 2, 0, 0, 0, 0, 0],
+        TYPE: [exports.dominationBody]
+    }]
+}
+exports.sanctuaries = {
+    PARENT: [exports.menu],
+    LABEL: 'Sanctuaries',
+    TURRETS: [{
+        POSITION: [base.SIZE * 2, 0, 0, 0, 0, 0],
+        TYPE: [exports.dominationBody]
+    }]
+}
 exports.obstacles = {
     PARENT: [exports.menu],
     LABEL: 'Obstacles',
@@ -8836,7 +8852,7 @@ exports.sentries.UPGRADES_TIER_0 = [
     exports.sentrySwarm,
     exports.sentryTrap
 ]
-exports.betatanks.UPGRADES_TIER_0 = [exports.sanctuaryV1, exports.sanctuaryV2, exports.sanctuaryV3, exports.sanctuaryV4]
+exports.betatanks.UPGRADES_TIER_0 = []
 exports.testTanks.UPGRADES_TIER_0 = [
     exports.repeatGunsTest,
     exports.repeatGunsTest2,
@@ -8849,10 +8865,20 @@ exports.misc.UPGRADES_TIER_0 = [
     exports.obstacles,
     exports.food
 ]
-exports.bases.UPGRADES_TIER_0 = [
+exports.baseProtectors.UPGRADES_TIER_0 = [
     exports.baseProtector,
     exports.baseProtector2,
-    exports.baseProtector3
+    exports.weirdBaseProtector,
+]
+exports.sanctuaries.UPGRADES_TIER_0 = [
+    exports.sanctuaryV1,
+    exports.sanctuaryV2,
+    exports.sanctuaryV3,
+    exports.sanctuaryV4
+]
+exports.bases.UPGRADES_TIER_0 = [
+    exports.baseProtectors,
+    exports.sanctuaries
 ]
 exports.obstacles.UPGRADES_TIER_0 = [
     exports.obstacle,
