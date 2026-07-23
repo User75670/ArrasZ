@@ -4297,7 +4297,7 @@ const sockets = (() => {
                   let all = []
                   for (let my of entities)
                     if ((my.type === 'wall' && my.alpha > 0.2) ||
-                         my.type === 'miniboss' ||
+                        my.type === 'miniboss' ||
                         (my.type === 'tank' && my.lifetime))
                       all.push({
                         id: my.id,

@@ -8610,13 +8610,24 @@ exports.zombieRamBase = {
     PARENT: [exports.genericTank],
     LABEL: 'Zombie',
     COLOR: 41,
+    LEVEL: 45,
+    CAN_BE_ON_LEADERBOARD: false,
     CONTROLLERS: ['nearestDifferentMaster', 'mapAltToFire', 'ram']
 }
 exports.zombieBase = {
     PARENT: [exports.genericTank],
     LABEL: 'Zombie',
     COLOR: 41,
+    LEVEL: 45,
+    CAN_BE_ON_LEADERBOARD: false,
     CONTROLLERS: ['nearestDifferentMaster', 'mapAltToFire', 'minion']
+}
+exports.zombieBossBase = {
+    PARENT: [exports.miniboss],
+    LABEL: 'Zombie',
+    COLOR: 41,
+    LEVEL: 45,
+    CAN_BE_ON_LEADERBOARD: false,
 }
 exports.zombie = {
     PARENT: [exports.zombieRamBase],
@@ -8653,6 +8664,33 @@ exports.sniperzombie = {
         atk: 0.2,
     })
 }
+exports.zombieDemolisher = {
+    PARENT: [exports.zombieBossBase],
+    LABEL: "Zombie Demolisher",
+    SHAPE: 4,
+    DANGER: 8,
+    SIZE: 30,
+    BODY: {
+        SPEED: base.SPEED * 0.6,
+        HEALTH: base.HEALTH * 2,
+        DENSITY: base.DENSITY * 2,
+        PUSHABILITY: 0.6,
+    },
+    GUNS: repeatGuns(4, {
+            POSITION: [12, 9, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pound, g.destroy]),
+                TYPE: exports.bullet,
+            },
+        }, {angleMod: 90}),
+    TURRETS: [
+        {
+            POSITION: [12, 0, 0, 0, 360, 1],
+            TYPE: exports.minigunTurret
+        }
+    ]
+}
+
 exports.bossesMenu = {
     PARENT: [exports.menu],
     LABEL: 'Bosses'
@@ -9010,7 +9048,8 @@ exports.zombiedefense.UPGRADES_TIER_0 = [
     exports.sanctuaries,
     exports.zombie,
     exports.babyzombie,
-    exports.sniperzombie
+    exports.sniperzombie,
+    exports.zombieDemolisher
 ]
 exports.tanks.UPGRADES_TIER_0 = [
     exports.basic,
