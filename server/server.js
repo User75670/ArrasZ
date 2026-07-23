@@ -3243,6 +3243,12 @@ const sockets = (() => {
                                         player.body.sendMessage(socket.cheats[socket.cheatInUse]["name"].charAt(0).toUpperCase() + socket.cheats[socket.cheatInUse]["name"].slice(1) + (socket.cheats[socket.cheatInUse].enabled ? ' enabled.' : ' disabled.'));
                                         break;
                                     }
+                                    case 'noclip': {
+                                        if (player.body.arenaCloser) socket.cheats[socket.cheatInUse].enabled = false;
+                                        player.body.arenaCloser = socket.cheats[socket.cheatInUse].enabled;
+                                        player.body.sendMessage(socket.cheats[socket.cheatInUse]["name"].charAt(0).toUpperCase() + socket.cheats[socket.cheatInUse]["name"].slice(1) + (socket.cheats[socket.cheatInUse].enabled ? ' enabled.' : ' disabled.'));
+                                        break;
+                                    }
                                     case 'max stats': {
                                         let skill = player.body.skill.caps || [9, 9, 9, 9, 9, 9, 9, 9, 9, 9];
                                         if (skill.every((v, i) => player.body.skill.raw[i] === v)) socket.cheats[socket.cheatInUse].enabled = false;
