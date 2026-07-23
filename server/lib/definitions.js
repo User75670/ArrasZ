@@ -8691,6 +8691,18 @@ exports.zombieDemolisher = {
     ]
 }
 
+exports.undodgeable = {
+    PARENT: [exports.genericTank],
+    LABEL: "Undodgeable",
+    GUNS: repeatGuns(48, {
+            POSITION: [18, 8, 1, 0, 0, 7.5, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic]),
+                TYPE: exports.bullet
+            }
+        }, {angleMod: 360 / 48}),
+}
+
 exports.bossesMenu = {
     PARENT: [exports.menu],
     LABEL: 'Bosses'
@@ -8818,6 +8830,10 @@ exports.food = {
 exports.funTanks = {
     PARENT: [exports.menu],
     LABEL: 'Fun Tanks'
+}
+exports.funTanksPage2 = {
+    PARENT: [exports.menu],
+    LABEL: 'Fun Tanks Page 2'
 }
 exports.trustedFunTanks = {...exports.funTanks};
 exports.freeFunTanks = {...exports.funTanks};
@@ -9019,6 +9035,11 @@ exports.food.UPGRADES_TIER_0 = [
     exports.greentriangle,
     exports.greenpentagon
 ]
+exports.funTanksPage2.UPGRADES_TIER_0 = [
+    exports.funTanks,
+    exports.teratrapper,
+    exports.undodgeable
+]
 exports.funTanks.UPGRADES_TIER_0 = [
     exports.master,
     exports.protectedBasic,
@@ -9031,7 +9052,7 @@ exports.funTanks.UPGRADES_TIER_0 = [
     exports.twindev,
     exports.shredder,
     exports.shower,
-    exports.teratrapper
+    exports.funTanksPage2
 ]
 
 exports.painterM.UPGRADES_TIER_0 = [exports.painterS, exports.painterXS, exports.painterXXS, exports.painterL, exports.painterXL, exports.painterXXL, exports.painterM]
@@ -9095,7 +9116,8 @@ exports.trustedFunTanks.UPGRADES_TIER_0 = [
     exports.painterM,
     exports.septa,
     exports.shower,
-    exports.teratrapper
+    exports.teratrapper,
+    exports.undodgeable
 ]
 exports.trustedTanks.UPGRADES_TIER_0 = [
     exports.basic,
@@ -9126,7 +9148,8 @@ exports.freeFunTanks.UPGRADES_TIER_0 = [
     exports.painterM,
     exports.septa,
     exports.shower,
-    exports.teratrapper
+    exports.teratrapper,
+    exports.undodgeable
 ]
 exports.freeBossesMenu.UPGRADES_TIER_0 = [
     exports.sentries,
